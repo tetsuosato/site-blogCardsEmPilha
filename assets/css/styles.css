@@ -1,0 +1,202 @@
+/* navbar */
+.navbar-brand{
+  height: 50px; 
+  width: 200px;
+  margin-left: 15px;
+}
+.img-logo {
+  height: 100%;
+  width: 100%;
+  display: block;
+  background: url('../image/logo_menu.png') no-repeat;
+  background-size: cover;
+  color: transparent;
+  justify-content: center;
+}
+.nav-item:hover {
+  border: 1px solid #9b9d9e;
+  background-color: #6c757d;
+  border-radius: 2px;
+}
+.dropdown-menu {
+  background-color: #343a40;
+  color: #9b9d9e; 
+}
+.dropdown-menu .dropdown-item {
+  color: #6f7071;
+}
+.dropdown-menu .dropdown-item:hover {
+  background-color: #6c757d;
+  color: #ffffff; 
+  border: 1px solid #9b9d9e;
+  border-radius: 2px;
+}
+
+
+/* header */
+.hide-header {
+  display: none;
+  transition: display 5s ease;
+  opacity: 5;
+}
+.redesocial {
+  padding: 3px;
+  width: 50px;
+  height: 50px;
+}
+.redesocial:hover {
+  border: 1px solid #9b9d9e;
+  border-radius: 2px;
+  background-color: #6c757d;
+}
+
+/* Tag HR */
+.theme-hr {
+  border: none;
+  border-top: 2px solid #212529; /* cor escura para tema claro */
+  transition: border-color 0.3s ease-in-out;
+}
+
+
+/* Postagens no index */
+.postagemindex {
+  /* border: 1px solid #212529;  cor padrão (escura) para tema claro */
+  border-radius: 0.5rem;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.postagemindex {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.postagemindex:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+.postagemindex .postagemindextitulo {
+  padding-top: 10px; 
+  padding-left: 10px; 
+  padding-right: 10px;
+}
+
+.postagemindex .postagemindexcol {
+  padding: 10px;
+}
+
+.postagemindex .postagemindexcolimg {
+  padding: 10px;
+}
+
+.postagemindexcolimg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.linkimagem {
+  justify-content: center;
+  align-items: center;
+}
+
+/*
+@media only screen and (max-width: 767px) {
+  .postagemindexcolimg img {
+    width: 200px;
+  }
+}
+*/
+
+/* Animação suave para todos os cards */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Ao passar o mouse, aumenta levemente e adiciona sombra */
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+/* Coluna fixa do index */
+.colunafixaindexcol {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Ao passar o mouse, aumenta levemente e adiciona sombra */
+.colunafixaindexcol:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* Botão trocar tema*/
+#toggleThemeBtn {
+  color: black; 
+  cursor: pointer;
+}
+
+/* ESTILO DOS BOTÕES */
+/* Estilo base comum para suavidade */
+.theme-button {
+  transition: all 0.3s ease-in-out;
+  font-weight: bold;
+  border-radius: 0.5rem;
+}
+
+/* Estilo para btn-secondary (modo claro) */
+.btn-secondary.theme-button {
+  background-color: #6c757d;
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary.theme-button:hover {
+  background-color: #5a6268;
+  transform: scale(1.03);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para btn-dark (modo escuro) */
+.btn-dark.theme-button {
+  background-color: #212529;
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.05);
+}
+
+.btn-dark.theme-button:hover {
+  background-color: #0d0f11;
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.1);
+}
+/* FINAL - ESTILO DOS BOTÕES */
+
+
+/* Adicionando estilo para transformar a primeira letra em maiúscula */
+.titlepost {
+  text-transform: capitalize;
+}
+
+.titlepost::first-letter {
+  text-transform: uppercase;
+}
+
+
+/* Tema claro */
+.theme-link {
+  color: #212529;
+  text-decoration: none;
+}
+.theme-link:hover {
+  color: #0d6efd; /* Azul Bootstrap */
+  text-decoration: underline;
+}
+
+/* Tema escuro */
+.bg-dark .theme-link {
+  color: #ffffff;
+}
+.bg-dark .theme-link:hover {
+  color: #0dcaf0; /* Azul claro Bootstrap */
+}
