@@ -147,17 +147,17 @@ header("Content-type: text/html; charset=UTF-8");
           <div class="p-4">
             <h4 class="pb-2 pt-2 mb-2 border-bottom">Veja mais</h4>
             <ol class="list-unstyled mb-0">
-              <li><a href="pagina_construcao.html" target="_blank" class="theme-link">Tags de postagens 1</a></li>
-              <li><a href="pagina_construcao.html" target="_blank" class="theme-link">Postagens antigas 1</a></li>
-              <li><a href="pagina_construcao.html" target="_blank" class="theme-link">Postagens antigas 2</a></li>
+              <li><a href="<?= BASE_URL ?>/pagina_construcao.html" target="_blank" class="theme-link">Tags de postagens 1</a></li>
+              <li><a href="<?= BASE_URL ?>/pagina_construcao.html" target="_blank" class="theme-link">Postagens antigas 1</a></li>
+              <li><a href="<?= BASE_URL ?>/pagina_construcao.html" target="_blank" class="theme-link">Postagens antigas 2</a></li>
             </ol>
           </div>
 
           <div class="p-4">
             <h4 class="pb-2 pt-2 mb-2 border-bottom">Confira Também</h4>
             <ol class="list-unstyled">
-              <li><a href="pagina_construcao.html" target="_blank" class="theme-link">Outras Recomendações 1</a></li>
-              <li><a href="pagina_construcao.html" target="_blank" class="theme-link">Outras Recomendações 2</a></li>
+              <li><a href="<?= BASE_URL ?>/pagina_construcao.html" target="_blank" class="theme-link">Outras Recomendações 1</a></li>
+              <li><a href="<?= BASE_URL ?>/pagina_construcao.html" target="_blank" class="theme-link">Outras Recomendações 2</a></li>
             </ol>
           </div>
         </div>
@@ -186,7 +186,8 @@ document.addEventListener('DOMContentLoaded', function() {
       container.innerHTML = '';
 
       posts.forEach(post => {
-        const url = `postagem.php?categoria=${slugify(post.categoria)}&slug=${post.slug}&id=${post.id}`;
+        // const url = `postagem.php?categoria=${slugify(post.categoria)}&slug=${post.slug}&id=${post.id}`;
+        const url = `postagem/${slugify(post.categoria)}/${post.slug}/${post.id}`;
 
         const postHTML = `
           <hr class="theme-hr">

@@ -14,16 +14,23 @@ if ($categoria === '' || $slug === '' || $id === '') {
 // Simulando uma postagem fixa só para teste
 $post = [
     'titulo' => 'Minha Primeira Postagem:'.$id,
-    'autor' => 'Pablo Tetsuo Sato',
-    'data' => '2025-06-13 18:30:00',
+    'autor' => 'Pablo Sato',
+    'data' => "07/07/2025 18:30",
     'categoria' => ucfirst($categoria),
     'imagem' => 'imagesposts/postagem'.$id.'.webp',
-    'conteudo' => [
-        $id.' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, urna tortor tincidunt arcu, vel porttitor nibh tellus nec sem.',
-        'Aenean quis magna sapien. Praesent ullamcorper, massa at lacinia tempus, justo nunc dapibus quam, a malesuada odio lorem ut justo.',
-        'Proin vel purus nec libero lacinia convallis. Fusce commodo magna sed fermentum convallis. Morbi rhoncus nulla nec ex imperdiet mattis.',
-        'Mauris congue finibus turpis nec ultricies. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.'
-    ],
+    'altimagem' => 'imagem principal da postagem',
+    'conteudo' => 
+        "   <p> <strong>Lorem ipsum</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, 
+            urna tortor tincidunt arcu, vel porttitor nibh tellus nec sem.
+            Aenean quis magna sapien. Praesent ullamcorper, massa at lacinia tempus, justo nunc dapibus quam, 
+            a malesuada odio lorem ut justo
+            Proin vel purus nec libero lacinia convallis. 
+            Fusce commodo magna sed fermentum convallis. Morbi rhoncus nulla nec ex imperdiet mattis
+            Mauris congue finibus turpis nec ultricies. Vestibulum ante ipsum primis in faucibus orci 
+            luctus et ultrices posuere cubilia curae.
+            </p>
+        "
+    ,
     'tags' => ['Dicas', 'Rock', 'Metal']
 ];
 
