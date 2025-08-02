@@ -1,0 +1,101 @@
+-- --------------------------------------------------------
+-- Servidor:                     127.0.0.1
+-- Versão do servidor:           10.4.32-MariaDB - mariadb.org binary distribution
+-- OS do Servidor:               Win64
+-- HeidiSQL Versão:              12.6.0.6765
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- Copiando estrutura do banco de dados para pablotetusosatoblog
+DROP DATABASE IF EXISTS `pablotetusosatoblog`;
+CREATE DATABASE IF NOT EXISTS `pablotetusosatoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+USE `pablotetusosatoblog`;
+
+-- Copiando estrutura para tabela pablotetusosatoblog.posts
+DROP TABLE IF EXISTS `posts`;
+CREATE TABLE IF NOT EXISTS `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(255) NOT NULL,
+  `autor` varchar(100) NOT NULL,
+  `data` datetime NOT NULL,
+  `categoria` varchar(50) DEFAULT NULL,
+  `imagem` varchar(255) DEFAULT NULL,
+  `altimagem` varchar(255) DEFAULT NULL,
+  `conteudo` longtext DEFAULT NULL,
+  `tags` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`tags`)),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Copiando dados para a tabela pablotetusosatoblog.posts: ~55 rows (aproximadamente)
+DELETE FROM `posts`;
+INSERT INTO `posts` (`id`, `titulo`, `autor`, `data`, `categoria`, `imagem`, `altimagem`, `conteudo`, `tags`) VALUES
+	(1, 'Minha Primeira Postagem:1', 'Pablo Sato', '2025-07-31 18:30:00', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p> <strong>Lorem ipsum</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, \r\n            urna tortor tincidunt arcu, vel porttitor nibh tellus nec sem.\r\n            Aenean quis magna sapien. Praesent ullamcorper, massa at lacinia tempus, justo nunc dapibus quam, \r\n            a malesuada odio lorem ut justo\r\n            Proin vel purus nec libero lacinia convallis. \r\n            Fusce commodo magna sed fermentum convallis. Morbi rhoncus nulla nec ex imperdiet mattis\r\n            Mauris congue finibus turpis nec ultricies. Vestibulum ante ipsum primis in faucibus orci \r\n            luctus et ultrices posuere cubilia curae.\r\n</p>', '["Dicas", "Rock", "Metal"]'),
+	(2, 'Minha Primeira Postagem:2', 'Pablo Sato', '2025-07-31 18:30:30', 'dicas', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 2</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, \r\n            urna tortor tincidunt arcu, vel porttitor nibh tellus nec sem.\r\n            Aenean quis magna sapien. Praesent ullamcorper, massa at lacinia tempus, justo nunc dapibus quam, \r\n            a malesuada odio lorem ut justo\r\n            Proin vel purus nec libero lacinia convallis. \r\n            Fusce commodo magna sed fermentum convallis. Morbi rhoncus nulla nec ex imperdiet mattis\r\n            Mauris congue finibus turpis nec ultricies. Vestibulum ante ipsum primis in faucibus orci \r\n            luctus et ultrices posuere cubilia curae.\r\n     </p>', '["Dicas", "Rock", "Metal"]'),
+	(3, 'Minha Primeira Postagem:3', 'Pablo Sato', '2025-07-31 18:30:30', 'video', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 3</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(4, 'Minha Primeira Postagem:4', 'Pablo Sato', '2025-07-31 22:15:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 4</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(5, 'Minha Primeira Postagem:5', 'Pablo Sato', '2025-07-31 22:15:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 4</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(6, 'Minha Primeira Postagem:6', 'Pablo Sato', '2025-07-31 22:16:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 5</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(7, 'Minha Primeira Postagem:7', 'Pablo Sato', '2025-07-31 22:17:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 6</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(8, 'Minha Primeira Postagem:8', 'Pablo Sato', '2025-07-31 22:18:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 7</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(9, 'Minha Primeira Postagem:9', 'Pablo Sato', '2025-07-31 22:19:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 8</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(10, 'Minha Primeira Postagem:10', 'Pablo Sato', '2025-07-31 22:20:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 9</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(11, 'Minha Primeira Postagem:11', 'Pablo Sato', '2025-07-31 22:21:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 10</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(12, 'Minha Primeira Postagem:12', 'Pablo Sato', '2025-07-31 22:22:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 11</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(13, 'Minha Primeira Postagem:13', 'Pablo Sato', '2025-07-31 22:23:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 12</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(14, 'Minha Primeira Postagem:14', 'Pablo Sato', '2025-07-31 22:24:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 13</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(15, 'Minha Primeira Postagem:15', 'Pablo Sato', '2025-07-31 22:25:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 14</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(16, 'Minha Primeira Postagem:16', 'Pablo Sato', '2025-07-31 22:26:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 15</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(17, 'Minha Primeira Postagem:17', 'Pablo Sato', '2025-07-31 22:27:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 16</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(18, 'Minha Primeira Postagem:18', 'Pablo Sato', '2025-07-31 22:28:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 17</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(19, 'Minha Primeira Postagem:19', 'Pablo Sato', '2025-07-31 22:29:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 18</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(20, 'Minha Primeira Postagem:20', 'Pablo Sato', '2025-07-31 22:30:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 19</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(21, 'Minha Primeira Postagem:21', 'Pablo Sato', '2025-07-31 22:31:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 20</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(22, 'Minha Primeira Postagem:22', 'Pablo Sato', '2025-07-31 22:32:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 21</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(23, 'Minha Primeira Postagem:23', 'Pablo Sato', '2025-07-31 22:33:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 22</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(24, 'Minha Primeira Postagem:24', 'Pablo Sato', '2025-07-31 22:34:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 23</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(25, 'Minha Primeira Postagem:25', 'Pablo Sato', '2025-07-31 22:35:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 24</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(26, 'Minha Primeira Postagem:26', 'Pablo Sato', '2025-07-31 22:36:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 25</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(27, 'Minha Primeira Postagem:27', 'Pablo Sato', '2025-07-31 22:37:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 26</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(28, 'Minha Primeira Postagem:28', 'Pablo Sato', '2025-07-31 22:38:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 27</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(29, 'Minha Primeira Postagem:29', 'Pablo Sato', '2025-07-31 22:39:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 28</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(30, 'Minha Primeira Postagem:30', 'Pablo Sato', '2025-07-31 22:40:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 29</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(31, 'Minha Primeira Postagem:31', 'Pablo Sato', '2025-07-31 22:41:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 30</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(32, 'Minha Primeira Postagem:32', 'Pablo Sato', '2025-07-31 22:42:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 31</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(33, 'Minha Primeira Postagem:33', 'Pablo Sato', '2025-07-31 22:43:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 32</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(34, 'Minha Primeira Postagem:34', 'Pablo Sato', '2025-07-31 22:44:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 33</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(35, 'Minha Primeira Postagem:35', 'Pablo Sato', '2025-07-31 22:45:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 34</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(36, 'Minha Primeira Postagem:36', 'Pablo Sato', '2025-07-31 22:46:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 35</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(37, 'Minha Primeira Postagem:37', 'Pablo Sato', '2025-07-31 22:47:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 36</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(38, 'Minha Primeira Postagem:38', 'Pablo Sato', '2025-07-31 22:48:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 37</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(39, 'Minha Primeira Postagem:39', 'Pablo Sato', '2025-07-31 22:49:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 38</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(40, 'Minha Primeira Postagem:40', 'Pablo Sato', '2025-07-31 22:50:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 39</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(41, 'Minha Primeira Postagem:41', 'Pablo Sato', '2025-07-31 22:51:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 40</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(42, 'Minha Primeira Postagem:42', 'Pablo Sato', '2025-07-31 22:52:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 41</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(43, 'Minha Primeira Postagem:43', 'Pablo Sato', '2025-07-31 22:53:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 42</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(44, 'Minha Primeira Postagem:44', 'Pablo Sato', '2025-07-31 22:54:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 43</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(45, 'Minha Primeira Postagem:45', 'Pablo Sato', '2025-07-31 22:55:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 44</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(46, 'Minha Primeira Postagem:46', 'Pablo Sato', '2025-07-31 22:56:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 45</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(47, 'Minha Primeira Postagem:47', 'Pablo Sato', '2025-07-31 22:57:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 46</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(48, 'Minha Primeira Postagem:48', 'Pablo Sato', '2025-07-31 22:58:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 47</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(49, 'Minha Primeira Postagem:49', 'Pablo Sato', '2025-07-31 22:59:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 48</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(50, 'Minha Primeira Postagem:50', 'Pablo Sato', '2025-07-31 23:00:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 49</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(51, 'Minha Primeira Postagem:51', 'Pablo Sato', '2025-07-31 23:01:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 50</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(52, 'Minha Primeira Postagem:52', 'Pablo Sato', '2025-07-31 23:02:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 51</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(53, 'Minha Primeira Postagem:53', 'Pablo Sato', '2025-07-31 23:03:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 52</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(54, 'Minha Primeira Postagem:54', 'Pablo Sato', '2025-07-31 23:04:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 53</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
+	(55, 'Minha Primeira Postagem:55', 'Pablo Sato', '2025-07-31 23:05:59', 'noticias', 'postagem.webp', 'imagem principal da postagem', '<p><strong>Lorem ipsum 54</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]');
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

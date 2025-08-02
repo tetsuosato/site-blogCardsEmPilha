@@ -1,0 +1,6 @@
+Options +Indexes
+
+AuthUserFile /etc/.htpasswd
+AuthType Basic
+AuthName "Pablo Tetsuo Sato - Acesso Restrito"
+Require valid-user

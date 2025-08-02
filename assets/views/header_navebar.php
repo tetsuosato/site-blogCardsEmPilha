@@ -1,10 +1,10 @@
 <!-- Header com ícones de redes sociais -->
 <header class="bg-dark text-light text-center py-3 bg-dark">
-    <a href="https://www.youtube.com/@pablosato"       class="text-light mx-2 redesocial" target="_blank" aria-label="Youtube"   title="Inscreva-se em nosso canal no Youtube"><i class="fab fa-youtube    fa-fw fa-lg"></i></a>
-    <a href="https://www.instagram.com/pablo_sato" class="text-light mx-2 redesocial" target="_blank" aria-label="Instagram" title="Siga-nos no Instagram">                <i class="fab fa-instagram  fa-fw fa-lg"></i></a>
-    <a href="https://github.com/tetsuosato"       class="text-light mx-2 redesocial" target="_blank" aria-label="Facebook"  title="Curti a nossa Fanpage">                <i class="fab fa-facebook   fa-fw fa-lg"></i></a>
-    <a href="https://github.com/tetsuosato"        class="text-light mx-2 redesocial" target="_blank" aria-label="TikTok"    title="Siga-nos no TikTok">                   <i class="fab fa-tiktok     fa-fw fa-lg"></i></a>
-    <a href="https://github.com/tetsuosato"       class="text-light mx-2 redesocial" target="_blank" aria-label="X-Twitter" title="Siga-nos no X-Twitter">                <i class="fab fa-x-twitter  fa-fw fa-lg"></i></a>
+    <a href="https://www.youtube.com/@pablosato"    class="text-light mx-2 redesocial" target="_blank" aria-label="Youtube"   title="Inscreva-se em nosso canal no Youtube"><i class="bi bi-youtube   fs-4"></i></a>
+    <a href="https://www.instagram.com/pablo_sato"  class="text-light mx-2 redesocial" target="_blank" aria-label="Instagram" title="Siga-nos no Instagram">                <i class="bi bi-instagram fs-4"></i></a>
+    <a href="https://github.com/tetsuosato"         class="text-light mx-2 redesocial" target="_blank" aria-label="Facebook"  title="Curti a nossa Fanpage">                <i class="bi bi-facebook  fs-4"></i></a>
+    <a href="https://github.com/tetsuosato"         class="text-light mx-2 redesocial" target="_blank" aria-label="TikTok"    title="Siga-nos no TikTok">                   <i class="bi bi-tiktok    fs-4"></i></a>
+    <a href="https://github.com/tetsuosato"         class="text-light mx-2 redesocial" target="_blank" aria-label="X-Twitter" title="Siga-nos no X-Twitter">                <i class="bi bi-twitter-x fs-4"></i></a>
 </header>
 
 <!-- Navbar -->
@@ -21,7 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <form class="d-flex form-inline">
                 <input class="form-control form-control-sm" type="search" placeholder="Pesquisar" aria-label="Search">
-                <button class="btn btn-outline-secondary btn-sm" type="submit">Pesquisar</button>
+                <button class="btn btn-outline-secondary btn-sm" type="submit"> <i class="bi bi-search"></i></button>
             </form>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-auto">
                 <li class="nav-item">

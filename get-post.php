@@ -1,38 +1,43 @@
 <?php
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
+include('config/config.php');
 
-// Simular parâmetros recebidos via GET
-$categoria = $_GET['categoria'] ?? '';
-$slug = $_GET['slug'] ?? '';
-$id = $_GET['id'] ?? '';
 
-if ($categoria === '' || $slug === '' || $id === '') {
-    echo json_encode(['erro' => 'Parâmetros inválidos ou incompletos.']);
-    exit;
+
+// Conectar ao banco de dados usando PDO
+// Connect to database using PDO
+$connection = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASSWORD);
+
+// Configurar PDO para lançar exceções em caso de erros
+// Configure PDO to throw exceptions in case of errors
+$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+
+$query = "SELECT * FROM posts WHERE `id`= 1";
+$result = $connection->query($query);
+
+if ($result->rowCount() == 1) {
+    $post = $result->fetch(PDO::FETCH_ASSOC);
 }
 
-// Simulando uma postagem fixa só para teste
-$post = [
-    'titulo' => 'Minha Primeira Postagem:'.$id,
-    'autor' => 'Pablo Sato',
-    'data' => "07/07/2025 18:30",
-    'categoria' => ucfirst($categoria),
-    'imagem' => 'imagesposts/postagem'.$id.'.webp',
-    'altimagem' => 'imagem principal da postagem',
-    'conteudo' => 
-        "   <p> <strong>Lorem ipsum</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, 
-            urna tortor tincidunt arcu, vel porttitor nibh tellus nec sem.
-            Aenean quis magna sapien. Praesent ullamcorper, massa at lacinia tempus, justo nunc dapibus quam, 
-            a malesuada odio lorem ut justo
-            Proin vel purus nec libero lacinia convallis. 
-            Fusce commodo magna sed fermentum convallis. Morbi rhoncus nulla nec ex imperdiet mattis
-            Mauris congue finibus turpis nec ultricies. Vestibulum ante ipsum primis in faucibus orci 
-            luctus et ultrices posuere cubilia curae.
-            </p>
-        "
-    ,
-    'tags' => ['Dicas', 'Rock', 'Metal']
+
+// === Se o campo tags estiver armazenado como JSON no banco, decodifica; caso contrário, adapta ===
+if (is_string($post['tags'])) {
+    $decoded = json_decode($post['tags'], true);
+    $post['tags'] = is_array($decoded) ? $decoded : [];
+}
+
+// === Formata o retorno como você tinha no exemplo ===
+$response = [
+    'titulo' => $post['titulo'],
+    'autor' => $post['autor'],
+    'data' => $post['data'],
+    'categoria' => $post['categoria'],
+    'imagem' => $post['imagem'],
+    'altimagem' => $post['altimagem'],
+    'conteudo' => $post['conteudo'], // cuidado: se isso vier do usuário, sanitize antes de exibir no front
+    'tags' => $post['tags'],
 ];
 
-// Retorna o JSON
-echo json_encode($post, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+// === Envia resposta ===
+echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

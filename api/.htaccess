@@ -1,0 +1,22 @@
+# Não lista o conteúdo dos subdiretórios na ausência de um index.php
+Options -Indexes
+
+# Liga o módulo do Apache de "Rewrite"
+RewriteEngine On
+
+# ---------------------------------------------------------------------
+# Força o Apache a criar a variável de ambiente para HTTP_AUTHORIZATION
+# ---------------------------------------------------------------------
+RewriteCond %{HTTP:Authorization} ^(.+)$
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+
+# ----------------------------------------------------------
+# Remove a extensão .php para URLs mais amigáveis (opcional)
+# ----------------------------------------------------------
+RewriteCond %{THE_REQUEST} \s/+(.+)\.php [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L]

@@ -4,45 +4,10 @@ header("Content-type: text/html; charset=UTF-8");
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <title>Blog Pablo Sato - Postagem</title>
-  <link rel="icon" href="assets/image/favicon.png">
-
-  <!-- Required meta tags -->
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="author" content="Pablo Sato">
-  <meta name="keywords" content="Blog Pablo Sato, elaborar as keywords">
-  <meta name="robots" content="index, follow">
-
-  <!-- Open Graph Tags -->
-  <meta name="Blog do Pablo Sato - Postagem - elaborar">
-  <meta property="og:title" content="Blog Pablo Sato - Postagem">
-  <meta property="og:description" content="Blog Pablo Sato - Postagem">
-  <meta property="og:image" content="https://ENDERECOSITE/assets/image/logo_menu.png">
-  <meta property="og:url" content="https://ENDERECOSITE">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Blog Pablo Sato">
-
-  <!-- Twitter Card Tags -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@BlogPabloSato">
-  <meta name="twitter:title" content="Blog Pablo Sato">
-  <meta name="twitter:description" content="Blog Pablo Sato DESCRICAO">
-  <meta name="twitter:image" content="https://ENDERECOSITEassets/image/logo_menu.png">
-  <meta name="twitter:url" content="https://ENDERECOSITE">
-
-  <!-- CSS -->
-  <link rel="stylesheet" type="text/css" href="<?= BASE_URL ?>/assets/css/styles.css?v=<?=time()?>">
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  
-  <!-- fontawesome -->
-  <script src="https://kit.fontawesome.com/ab3f175b89.js" crossorigin="anonymous"></script>
-
-</head>
+<?php
+$title = "Blog Pablo Sato"; // título da aba
+include('assets/views/head.php');
+?>
 
 <body class="bg-light text-dark">
 
@@ -169,72 +134,66 @@ header("Content-type: text/html; charset=UTF-8");
   <!-- Footer -->
   <?php include __DIR__ . '/assets/views/footer.php'; ?>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+      fetch('posts-json.php')
+        .then(response => response.json())
+        .then(posts => {
+          const container = document.getElementById('lista-postagens');
+          container.innerHTML = '';
+
+          posts.forEach(post => {
+            // const url = `postagem.php?categoria=${slugify(post.categoria)}&slug=${post.slug}&id=${post.id}`;
+            const url = `postagem/${slugify(post.categoria)}/${post.slug}/${post.id}`;
+
+            const postHTML = `
+              <hr class="theme-hr">
+              <div class="row flex-xd-column g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative shadow-lg postagemindex">
+                <div class="postagemindextitulo">
+                  <a href="${url}" class="text-reset text-decoration-none">
+                    <strong>${post.titulo}</strong>
+                  </a>
+                </div>
+                <div class="col-md-6 postagemindexcolimg">
+                  <a href="${url}" class="linkimagem">
+                    <img src="${post.imagem}" class="img-fluid rounded" alt="Thumbnail">
+                  </a>
+                </div>
+                <div class="col-md-6 postagemindexcol">
+                  <p>
+                    <strong>${post.tipo}</strong> - <strong class="text-secondary">${post.categoria}</strong>
+                    <div class="mb-1 text-muted"><small>${post.autor}</small> - ${formatarData(post.data)}</div>
+                  </p>
+                  <p>${post.resumo}</p>
+                  <a href="${url}" class="btn btn-dark mt-2 theme-button">Continue lendo</a>
+                </div>
+              </div>
+            `;
+            container.innerHTML += postHTML;
+          });
+        })
+        .catch(error => console.error('Erro ao carregar os posts:', error));
+
+      function formatarData(data) {
+        const d = new Date(data);
+        return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+
+      function slugify(str) {
+        return str
+          .normalize('NFD')                    
+          .replace(/[\u0300-\u036f]/g, '')    
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')        
+          .replace(/(^-|-$)+/g, '');          
+      }
+    });
+  </script>
+
 </body>
 
-<!-- Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<!-- Scripts -->
-<script src="<?= BASE_URL ?>/assets/js/scripts.js?v=<?=time()?>"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-
-  fetch('posts-json.php')
-    .then(response => response.json())
-    .then(posts => {
-      const container = document.getElementById('lista-postagens');
-      container.innerHTML = '';
-
-      posts.forEach(post => {
-        // const url = `postagem.php?categoria=${slugify(post.categoria)}&slug=${post.slug}&id=${post.id}`;
-        const url = `postagem/${slugify(post.categoria)}/${post.slug}/${post.id}`;
-
-        const postHTML = `
-          <hr class="theme-hr">
-          <div class="row flex-xd-column g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative shadow-lg postagemindex">
-            <div class="postagemindextitulo">
-              <a href="${url}" class="text-reset text-decoration-none">
-                <strong>${post.titulo}</strong>
-              </a>
-            </div>
-            <div class="col-md-6 postagemindexcolimg">
-              <a href="${url}" class="linkimagem">
-                <img src="${post.imagem}" class="img-fluid rounded" alt="Thumbnail">
-              </a>
-            </div>
-            <div class="col-md-6 postagemindexcol">
-              <p>
-                <strong>${post.tipo}</strong> - <strong class="text-secondary">${post.categoria}</strong>
-                <div class="mb-1 text-muted"><small>${post.autor}</small> - ${formatarData(post.data)}</div>
-              </p>
-              <p>${post.resumo}</p>
-              <a href="${url}" class="btn btn-dark mt-2 theme-button">Continue lendo</a>
-            </div>
-          </div>
-        `;
-        container.innerHTML += postHTML;
-      });
-    })
-    .catch(error => console.error('Erro ao carregar os posts:', error));
-
-  function formatarData(data) {
-    const d = new Date(data);
-    return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
-
-  function slugify(str) {
-    return str
-      .normalize('NFD')                    
-      .replace(/[\u0300-\u036f]/g, '')    
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')        
-      .replace(/(^-|-$)+/g, '');          
-  }
-});
-</script>
-
 </html>
-
