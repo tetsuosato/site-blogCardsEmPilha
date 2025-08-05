@@ -1,7 +1,9 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
-include('config/config.php');
+include('../lib/config.php');
 
+
+$id = isset($_GET['id']) ? $_GET['id'] : null;
 
 
 // Conectar ao banco de dados usando PDO
@@ -13,7 +15,7 @@ $connection = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, D
 $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-$query = "SELECT * FROM posts WHERE `id`= 1";
+$query = "SELECT * FROM posts WHERE `id`= $id";
 $result = $connection->query($query);
 
 if ($result->rowCount() == 1) {
@@ -27,13 +29,15 @@ if (is_string($post['tags'])) {
     $post['tags'] = is_array($decoded) ? $decoded : [];
 }
 
+$caminhoImagem = 'imagesposts/' . $post['imagem'];
+
 // === Formata o retorno como você tinha no exemplo ===
 $response = [
     'titulo' => $post['titulo'],
     'autor' => $post['autor'],
     'data' => $post['data'],
     'categoria' => $post['categoria'],
-    'imagem' => $post['imagem'],
+    'imagem' => $caminhoImagem,
     'altimagem' => $post['altimagem'],
     'conteudo' => $post['conteudo'], // cuidado: se isso vier do usuário, sanitize antes de exibir no front
     'tags' => $post['tags'],

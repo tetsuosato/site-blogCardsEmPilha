@@ -125,7 +125,7 @@
 
 /* Ao passar o mouse, aumenta levemente e adiciona sombra */
 .colunafixaindexcol:hover {
-  transform: scale(1.03);
+  /*transform: scale(1.03);*/
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 

@@ -10,7 +10,7 @@ $slug = isset($partes[1]) ? $partes[1] : '';
 $id = isset($partes[2]) ? $partes[2] : '';
 
 // Faz a leitura da Postagem via API
-$postagemURL = BASE_URL."/get-post.php?categoria=$categoria&slug=$slug&id=$id";
+$postagemURL = BASE_URL."/api/post-unico.php?categoria=$categoria&slug=$slug&id=$id";
 $postagemJson = file_get_contents($postagemURL);
 $postagem = json_decode($postagemJson, true);
 ?>

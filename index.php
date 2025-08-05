@@ -97,8 +97,9 @@ include('assets/views/head.php');
         <div id="lista-postagens"></div>
 
         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-          <a href="pagina_construcao.html" type="button" target="_blank" class="btn btn-outline-dark theme-outline-button">Conferir Mais</a>
+          <button id="btn-carregar-mais" type="button" class="btn btn-outline-dark theme-outline-button">Conferir Mais</button>
         </div>
+
 
       </div><!-- col-md-8 -->
 
@@ -136,44 +137,21 @@ include('assets/views/head.php');
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      const container = document.getElementById('lista-postagens');
+      const btnMais = document.getElementById('btn-carregar-mais');
+      let currentPage = 1;
+      const perPage = 10;
+      let loading = false;
+      let hasMore = true;
 
-      fetch('posts-json.php')
-        .then(response => response.json())
-        .then(posts => {
-          const container = document.getElementById('lista-postagens');
-          container.innerHTML = '';
-
-          posts.forEach(post => {
-            // const url = `postagem.php?categoria=${slugify(post.categoria)}&slug=${post.slug}&id=${post.id}`;
-            const url = `postagem/${slugify(post.categoria)}/${post.slug}/${post.id}`;
-
-            const postHTML = `
-              <hr class="theme-hr">
-              <div class="row flex-xd-column g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative shadow-lg postagemindex">
-                <div class="postagemindextitulo">
-                  <a href="${url}" class="text-reset text-decoration-none">
-                    <strong>${post.titulo}</strong>
-                  </a>
-                </div>
-                <div class="col-md-6 postagemindexcolimg">
-                  <a href="${url}" class="linkimagem">
-                    <img src="${post.imagem}" class="img-fluid rounded" alt="Thumbnail">
-                  </a>
-                </div>
-                <div class="col-md-6 postagemindexcol">
-                  <p>
-                    <strong>${post.tipo}</strong> - <strong class="text-secondary">${post.categoria}</strong>
-                    <div class="mb-1 text-muted"><small>${post.autor}</small> - ${formatarData(post.data)}</div>
-                  </p>
-                  <p>${post.resumo}</p>
-                  <a href="${url}" class="btn btn-dark mt-2 theme-button">Continue lendo</a>
-                </div>
-              </div>
-            `;
-            container.innerHTML += postHTML;
-          });
-        })
-        .catch(error => console.error('Erro ao carregar os posts:', error));
+      function slugify(str) {
+        return str
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)+/g, '');
+      }
 
       function formatarData(data) {
         const d = new Date(data);
@@ -183,14 +161,81 @@ include('assets/views/head.php');
         });
       }
 
-      function slugify(str) {
-        return str
-          .normalize('NFD')                    
-          .replace(/[\u0300-\u036f]/g, '')    
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')        
-          .replace(/(^-|-$)+/g, '');          
+      function montarPostHTML(post) {
+        const url = `postagem/${slugify(post.categoria)}/${post.slug}/${post.id}`;
+
+        // criar container do post
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `
+          <hr class="theme-hr">
+          <div class="row flex-xd-column g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative shadow-lg postagemindex">
+            <div class="postagemindextitulo">
+              <a href="${url}" class="text-reset text-decoration-none">
+                <strong>${post.titulo}</strong>
+              </a>
+            </div>
+            <div class="col-md-6 postagemindexcolimg">
+              <a href="${url}" class="linkimagem">
+                <img src="${post.imagem}" class="img-fluid rounded" alt="Thumbnail">
+              </a>
+            </div>
+            <div class="col-md-6 postagemindexcol">
+              <p>
+                <strong>${post.tipo}</strong> - <strong class="text-secondary">${post.categoria}</strong>
+                <div class="mb-1 text-muted"><small>${post.autor}</small> - ${formatarData(post.data)}</div>
+              </p>
+              <p>${post.resumo}</p>
+              <a href="${url}" class="btn btn-dark mt-2 theme-button">Continue lendo</a>
+            </div>
+          </div>
+        `;
+        return wrapper;
       }
+
+      async function carregarPosts() {
+        if (loading || !hasMore) return;
+        loading = true;
+        btnMais.disabled = true;
+        btnMais.textContent = 'Carregando...';
+
+        try {
+          const resp = await fetch(`api/posts-index.php?page=${currentPage}&per_page=${perPage}/`);
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const data = await resp.json();
+
+          if (!Array.isArray(data.posts)) {
+            console.error('Resposta inesperada', data);
+            return;
+          }
+
+          data.posts.forEach(post => {
+            const postEl = montarPostHTML(post);
+            container.appendChild(postEl);
+          });
+
+          hasMore = data.pagination.has_more;
+          if (!hasMore) {
+            btnMais.textContent = 'Não há mais posts';
+            btnMais.disabled = true;
+          } else {
+            currentPage += 1;
+            btnMais.textContent = 'Conferir Mais';
+            btnMais.disabled = false;
+          }
+        } catch (err) {
+          console.error('Erro ao carregar os posts:', err);
+          btnMais.textContent = 'Tentar novamente';
+          btnMais.disabled = false;
+        } finally {
+          loading = false;
+        }
+      }
+
+      // evento do botão
+      btnMais.addEventListener('click', carregarPosts);
+
+      // carrega a primeira página automaticamente
+      carregarPosts();
     });
   </script>
 
