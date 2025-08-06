@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
-include('../lib/config.php');
+include('../lib/config.php'); // constantes
 
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
