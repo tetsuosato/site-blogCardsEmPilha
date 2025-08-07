@@ -1,6 +1,6 @@
 <head>
   <title><?= isset($title) ? $title : '"Blog Pablo Sato'; ?></title>
-  <link rel="icon" href="assets/image/favicon.png">
+  <link rel="icon" href="<?= BASE_URL ?>/assets/image/favicon.png">
 
   <!-- Required meta tags -->
   <meta charset="UTF-8">

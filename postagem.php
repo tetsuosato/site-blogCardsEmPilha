@@ -40,7 +40,13 @@ include('assets/views/head.php');
           <strong><?= htmlspecialchars($postagem['tipo']) ?></strong> - <?= htmlspecialchars($postagem['categoria']) ?>
         </p>
 
-        <img src="<?= BASE_URL .'/' .$postagem['imagem']?>" alt="<?=$postagem['altimagem']?>" class="img-fluid rounded mb-4 mt-2 shadow d-block mx-auto w-75">
+        <a href="<?= htmlspecialchars($postagem['urlimagem']) ?>" target="_blank">
+          <img 
+            src="<?= htmlspecialchars(BASE_URL . '/' . $postagem['imagem']) ?>" 
+            alt="<?= htmlspecialchars($postagem['titulo']) ?>" 
+            class="img-fluid rounded mb-4 mt-2 shadow d-block mx-auto w-75"
+          >
+        </a>
 
         <article class="col-md-12 mb-5">
           <?= $postagem['conteudo'] ?>

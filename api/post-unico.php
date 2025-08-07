@@ -1,6 +1,9 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
-include('../lib/config.php'); // constantes
+include('../lib/config.php');
+
+mb_internal_encoding('UTF-8');
+
 
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -31,15 +34,20 @@ if (is_string($post['tags'])) {
 
 $caminhoImagem = 'imagesposts/' . $post['imagem'];
 
+
+$dataOriginal = $post['data'];
+$dataFormatada = date('d/m/Y H:i', strtotime($dataOriginal));
+
+
 // === Formata o retorno como você tinha no exemplo ===
 $response = [
     'titulo' => $post['titulo'],
     'autor' => $post['autor'],
-    'data' => $post['data'],
+    'data' => $dataFormatada,
     'tipo' => $post['tipo'],
     'categoria' => $post['categoria'],
     'imagem' => $caminhoImagem,
-    'altimagem' => $post['altimagem'],
+    'urlimagem' => $post['urlimagem'],
     'conteudo' => $post['conteudo'], // cuidado: se isso vier do usuário, sanitize antes de exibir no front
     'tags' => $post['tags'],
 ];
