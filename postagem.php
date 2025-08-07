@@ -37,7 +37,7 @@ include('assets/views/head.php');
         <p class="meta-info mb-1">
           <strong>Por:</strong> <?= htmlspecialchars($postagem['autor']) ?> |
           <strong>Publicado em:</strong> <?= htmlspecialchars($postagem['data']) ?> |
-          <strong>Categoria:</strong> <?= htmlspecialchars($postagem['categoria']) ?>
+          <strong><?= htmlspecialchars($postagem['tipo']) ?></strong> - <?= htmlspecialchars($postagem['categoria']) ?>
         </p>
 
         <img src="<?= BASE_URL .'/' .$postagem['imagem']?>" alt="<?=$postagem['altimagem']?>" class="img-fluid rounded mb-4 mt-2 shadow d-block mx-auto w-75">

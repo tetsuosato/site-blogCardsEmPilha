@@ -36,6 +36,7 @@ $response = [
     'titulo' => $post['titulo'],
     'autor' => $post['autor'],
     'data' => $post['data'],
+    'tipo' => $post['tipo'],
     'categoria' => $post['categoria'],
     'imagem' => $caminhoImagem,
     'altimagem' => $post['altimagem'],

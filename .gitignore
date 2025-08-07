@@ -5,4 +5,4 @@
 *.log
 
 # Ignorar a pasta de uploads
-/uploads/
+/imagesposts/
