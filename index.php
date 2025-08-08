@@ -176,7 +176,7 @@ include('assets/views/head.php');
             </div>
             <div class="col-md-6 postagemindexcolimg">
               <a href="${url}" class="linkimagem">
-                <img src="${post.imagem}" class="img-fluid rounded" alt="Thumbnail">
+                <img src="${post.imagem}" class="img-fluid rounded" alt="${post.titulo}">
               </a>
             </div>
             <div class="col-md-6 postagemindexcol">
