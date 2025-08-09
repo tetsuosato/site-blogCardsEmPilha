@@ -18,7 +18,7 @@ $postagem = json_decode($postagemJson, true);
 <html lang="pt-br">
 
 <?php
-$title = "Blog Pablo Sato - Postagem - $slug"; // título da aba
+$title = "$slug - Blog Pablo Sato"; // título da aba
 include('assets/views/head.php');
 ?>
 
@@ -42,7 +42,7 @@ include('assets/views/head.php');
 
         <a href="<?= htmlspecialchars($postagem['urlimagem']) ?>" target="_blank">
           <img 
-            src="<?= htmlspecialchars(BASE_URL . '/' . $postagem['imagem']) ?>" 
+            src="<?= htmlspecialchars(BASE_URL . '/' . $postagem['imagem']) . '?t=' . time() ?>" 
             alt="<?= htmlspecialchars($postagem['titulo']) ?>" 
             class="img-fluid rounded mb-4 mt-2 shadow d-block mx-auto w-75"
           >
