@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 include('../lib/config.php');
+include('functions/functions.php');
 
 mb_internal_encoding('UTF-8');
 
@@ -24,9 +25,24 @@ try {
         exit;
     }
 
-    $sql = "SELECT * FROM posts WHERE id = :id LIMIT 1";
+    $slug = filter_input(INPUT_GET, 'slug', FILTER_UNSAFE_RAW);
+    if ($slug !== null) {
+        $slug = trim($slug);
+        // permite só letras, números, hífen e underscore
+        $slug = preg_replace('/[^a-z0-9\-_]/i', '', $slug);
+        $slug = strtolower($slug);
+    } else {
+        // Se não informar id válido, retorna erro
+        http_response_code(400);
+        echo json_encode(['error' => 'Parâmetro slug inválido ou não informado']);
+        exit;
+    }
+
+
+    $sql = "SELECT * FROM posts WHERE id = :id AND slug = :slug LIMIT 1";
     $stmt = $connection->prepare($sql);
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);
     $stmt->execute();
 
     $post = $stmt->fetch();
@@ -63,6 +79,7 @@ try {
         'tags' => $post['tags'],
     ];
 
+    http_response_code(200);
     echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
 } catch (PDOException $e) {

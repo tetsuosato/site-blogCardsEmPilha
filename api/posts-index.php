@@ -1,21 +1,9 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 include('../lib/config.php');
+include('functions/functions.php');
 
 mb_internal_encoding('UTF-8');
-
-function gerar_resumo(string $conteudo, int $max_completo = 160): string {
-    // Remove HTML e normaliza espaços
-    $texto_limpo = trim(preg_replace('/\s+/', ' ', strip_tags($conteudo)));
-
-    if (mb_strlen($texto_limpo) <= $max_completo) {
-        return $texto_limpo;
-    }
-
-    // Queremos 157 chars + "..." = 160
-    $parte = mb_substr($texto_limpo, 0, 157);
-    return $parte . '...';
-}
 
 try {
     $connection = new PDO(
@@ -25,18 +13,37 @@ try {
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false
         ]
     );
 
     // paginação
-    $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-    $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 10;
-    $per_page = min(50, max(1, $per_page));
+    $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, [
+        'options' => ['default' => 1, 'min_range' => 1]
+    ]);
+    $per_page = filter_input(INPUT_GET, 'per_page', FILTER_VALIDATE_INT, [
+        'options' => ['default' => 10, 'min_range' => 1, 'max_range' => 50]
+    ]);
 
     // filtros opcionais
     $id = isset($_GET['id']) ? intval($_GET['id']) : null;
-    $slug = isset($_GET['slug']) ? trim($_GET['slug']) : null;
-    $categoria = isset($_GET['categoria']) ? trim($_GET['categoria']) : null;
+
+    $slug = filter_input(INPUT_GET, 'slug', FILTER_UNSAFE_RAW);
+    if ($slug !== null) {
+        $slug = trim($slug);
+        // permite só letras, números, hífen e underscore
+        $slug = preg_replace('/[^a-z0-9\-_]/i', '', $slug);
+        $slug = strtolower($slug);
+    }
+
+    $categoria = filter_input(INPUT_GET, 'categoria', FILTER_UNSAFE_RAW);
+    if ($categoria !== null) {
+        $categoria = trim($categoria);
+        $allowed = ['rock','metal','pop']; // exemplo: sua lista real
+        if (!in_array($categoria, $allowed, true)) {
+            $categoria = null;
+        }
+    }
 
     $whereClauses = [];
     $params = [];
@@ -91,7 +98,7 @@ try {
         $data_formatada = $dt->format('Y-m-d H:i');
 
         return [
-            'id' => $row['id'],
+            'id' => (string) $row['id'],
             'titulo' => $row['titulo'],
             'categoria' => $row['categoria'],
             'tipo' => $row['tipo'],
@@ -116,6 +123,7 @@ try {
         ]
     ];
 
+    http_response_code(200);
     echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 } catch (PDOException $e) {
     http_response_code(500);
