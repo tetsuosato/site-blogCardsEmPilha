@@ -28,6 +28,27 @@ if (!$postagemJson) {
 }
 // ==================== FINAL - RECEBE E RETORNA A POSTAGEM ====================
 
+
+// ==================== LEITURA DA API DE DESTAQUES ====================
+
+// Faz a leitura da Postagem via API
+$destaquesURL = BASE_URL."/api/destaques.php";
+$destaquesJson = @file_get_contents($destaquesURL);
+
+// Verifica status HTTP
+$statusCodeDestaques = null;
+if (isset($http_response_header) && preg_match('{HTTP/\S+ (\d{3})}', $http_response_header[0], $match)) {
+  $statusCodeDestaques = (int)$match[1];
+}
+
+if (!$destaquesJson) {
+  $destaques = "erro";
+} else{
+  $destaques = json_decode($destaquesJson, true);
+}
+// ==================== LEITURA DA API DE DESTAQUES ====================
+
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -126,76 +147,7 @@ include('assets/views/head.php');
   </div>
 
   <!-- DESTAQUES -->
-  <div class="container">
-    <div class="row mb-2">
-      <!-- Destaques 1 -->
-      <div class="col-md-8">
-        <h3 class="pb-2 pt-2 mb-2 border-bottom">Destaques 1</h3>
-        <!-- 1º Destaque 1 -->
-        <div class="card mb-3 shadow theme-card">
-          <div class="row g-0">
-            <div class="col-md-4">
-              <img src="<?=BASE_URL?>/imagesposts\postagem10.webp" class="img-fluid rounded p-2" alt="Destaque 1">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">Título para colocar aqui</h5>
-                <p>
-                  <strong>Artigo</strong> - <strong class="text-secondary">Dicas</strong>
-                  <div class="mb-1 text-muted"><small>Pablo Sato</small> - 13/06/2025 17:30</div>
-                </p>
-                <p class="card-text">Texto Resumo da postagem. Aqui você pode colocar uma breve descrição do conteúdo, destacando os pontos principais ou o que o leitor pode esperar encontrar. </p>
-                <a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="btn btn-dark theme-button">Leia mais</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2º Destaque 1 -->
-        <div class="card mb-3 shadow theme-card">
-          <div class="row g-0">
-            <div class="col-md-4">
-              <img src="<?=BASE_URL?>/imagesposts\postagem8.webp" class="img-fluid rounded p-2" alt="Destaque 1">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">Título da postagem</h5>
-                <p>
-                  <strong>Artigo</strong> - <strong class="text-secondary">Dicas</strong>
-                  <div class="mb-1 text-muted"><small>Pablo Sato</small> - 13/06/2025 17:30</div>
-                </p>
-                <p class="card-text">Texto Resumo da postagem. Aqui você pode colocar uma breve descrição do conteúdo, destacando os pontos principais ou o que o leitor pode esperar encontrar.</p>
-                <a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="btn btn-dark theme-button">Leia mais</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- col-md-6 -->
-      <!-- FINAL - Destaques 1 -->
-
-      <!-- Destaques 2 -->
-      <div class="col-sm-4 align-items-center justify-content-center">
-
-        <h3 class="pb-2 pt-2 mb-2 border-bottom">Destaques 2</h3>
-
-        <div class="card shadow theme-card">
-          <img src="<?=BASE_URL?>/imagesposts/postagem9.webp" class="card-img-top rounded" alt="Destaque 2">
-          <div class="card-body">
-            <h5 class="card-title">TITULO DO DESTAQUE 2</h5>
-            <p>
-              <strong>Artigo</strong> - <strong class="text-secondary">Dicas</strong>
-              <div class="mb-1 text-muted"><small>Pablo Sato</small> - 13/06/2025 17:30</div>
-            </p>
-            <p class="card-text">Texto Resumo da postagem. Aqui você pode colocar uma breve descrição do conteúdo, destacando os pontos principais ou o que o leitor pode esperar encontrar.</p>
-            <a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="btn btn-dark theme-button">Leia mais</a>
-          </div>
-        </div>
-
-      </div><!-- col-md-6 -->
-      <!-- FINAL - Destaques 2 -->
-    </div><!-- row mb-2 -->
-  </div><!-- container -->
+  <?php include __DIR__ . '/assets/views/destaques.php'; ?>
   <!-- FINAL - DESTAQUES -->
 
   <!-- Footer -->
