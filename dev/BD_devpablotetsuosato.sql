@@ -20,6 +20,22 @@ DROP DATABASE IF EXISTS `pablotetusosatoblog`;
 CREATE DATABASE IF NOT EXISTS `pablotetusosatoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
 USE `pablotetusosatoblog`;
 
+-- Copiando estrutura para tabela pablotetusosatoblog.destaques
+DROP TABLE IF EXISTS `destaques`;
+CREATE TABLE IF NOT EXISTS `destaques` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `destaques` varchar(20) DEFAULT NULL COMMENT 'Lugar de destaque',
+  `ordem` int(11) DEFAULT NULL COMMENT 'Ordem do destaque',
+  `idpost` int(11) DEFAULT NULL COMMENT 'Id do post',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Copiando dados para a tabela pablotetusosatoblog.destaques: ~3 rows (aproximadamente)
+REPLACE INTO `destaques` (`id`, `destaques`, `ordem`, `idpost`) VALUES
+	(1, '1', 1, 1),
+	(2, '1', 2, 2),
+	(5, '2', 1, 5);
+
 -- Copiando estrutura para tabela pablotetusosatoblog.posts
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts` (
