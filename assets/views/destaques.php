@@ -4,7 +4,7 @@
         
         <!-- Destaques 1 -->
         <div class="col-md-8">
-            <h3 class="pb-2 pt-2 mb-2 border-bottom">Destaques 1</h3>
+            <h3 class="pb-2 pt-2 mb-2 border-bottom">Destaques</h3>
 
             <?php if (isset($destaques['destaque1']) && is_array($destaques['destaque1'])): ?>
                 <?php foreach ($destaques['destaque1'] as $post): ?>
@@ -37,7 +37,7 @@
         <!-- Destaques 2 -->
         <div class="col-sm-4 align-items-center justify-content-center">
 
-            <h3 class="pb-2 pt-2 mb-2 border-bottom">Destaques 2</h3>
+            <h3 class="pb-2 pt-2 mb-2 border-bottom">Recomendado</h3>
 
             <?php if (isset($destaques['destaque2']) && is_array($destaques['destaque2'])): ?>
                 <?php foreach ($destaques['destaque2'] as $post): ?>
