@@ -2,6 +2,7 @@
 require 'lib/config.php';
 header("Content-type: text/html; charset=UTF-8");
 
+$pesquisa = NULL; // Padrão de pesquisa
 
 // ==================== RECEBE E RETORNA A POSTAGEM ====================
 // Recebe os parametros da URL
@@ -95,7 +96,7 @@ include('assets/views/head.php');
               <h5>Tags:</h5>
               <div>
                 <?php foreach ($postagem['tags'] as $tag): ?>
-                  <a href="pagina_construcao.html" class="badge bg-secondary text-decoration-none me-2 mb-2">
+                  <a href="<?= BASE_URL ?>/resultados?pesquisa=<?=htmlspecialchars($tag)?>" class="badge bg-secondary text-decoration-none me-2 mb-2">
                     <?= htmlspecialchars($tag) ?>
                   </a>
                 <?php endforeach; ?>
@@ -117,38 +118,18 @@ include('assets/views/head.php');
       <!-- FIM - POSTAGEM -->
 
 
-      <div class="col-md-3 g-0 mb-4 mt-2 border rounded shadow colunafixaindexcol">
-        <div class="position-sticky" style="top: 3rem;">
-          <div class="p-4 mb-3 rounded">
-            <h4 class="pb-2 pt-2 mb-2 border-bottom">Sobre</h4>
-            <p class="mb-0"><em>Aqui descreve do que se trata o blog</em></p>
-          </div>
-
-          <div class="p-4">
-            <h4 class="pb-2 pt-2 mb-2 border-bottom">Veja mais</h4>
-            <ol class="list-unstyled mb-0">
-              <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Tags de postagens 1</a></li>
-              <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Postagens antigas 1</a></li>
-              <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Postagens antigas 2</a></li>
-            </ol>
-          </div>
-
-          <div class="p-4">
-            <h4 class="pb-2 pt-2 mb-2 border-bottom">Confira Também</h4>
-            <ol class="list-unstyled">
-              <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Outras Recomendações 1</a></li>
-              <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Outras Recomendações 2</a></li>
-            </ol>
-          </div>
-        </div>
-      </div>
+      <!-- Coluna Sobre -->
+      <?php include __DIR__ . '/assets/views/coluna_sobre.php'; ?>
+      <!-- FINAL - Coluna Sobre -->
       
     </div><!-- row -->
   </div>
 
+
   <!-- DESTAQUES -->
   <?php include __DIR__ . '/assets/views/destaques.php'; ?>
   <!-- FINAL - DESTAQUES -->
+
 
   <!-- Footer -->
   <?php include __DIR__ . '/assets/views/footer.php'; ?>

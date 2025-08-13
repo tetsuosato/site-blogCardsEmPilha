@@ -25,41 +25,64 @@ try {
         'options' => ['default' => 10, 'min_range' => 1, 'max_range' => 50]
     ]);
 
+    // Pesquisa
+    $pesquisa = filter_input(INPUT_GET, 'pesquisa', FILTER_UNSAFE_RAW);
+    if ($pesquisa !== null) {
+        $pesquisa = trim($pesquisa);
+        $pesquisa = strip_tags($pesquisa); // Remove HTML
+        $pesquisa = mb_substr($pesquisa, 0, 100); // Limita tamanho (ex: 100 caracteres)
+    }
+    
+    $whereClauses = [];
+    $params = [];
+
+    // pesquisa livre
+    if ($pesquisa !== null && $pesquisa !== '') {
+        $whereClauses[] = "(
+            p.titulo LIKE :pesquisa1
+            OR p.slug LIKE :pesquisa2
+            OR p.autor LIKE :pesquisa3
+            OR p.tipo LIKE :pesquisa4
+            OR p.categoria LIKE :pesquisa5
+            OR p.tags LIKE :pesquisa6
+        )";
+        for ($i = 1; $i <= 6; $i++) {
+            $params[":pesquisa{$i}"] = '%' . $pesquisa . '%';
+        }
+    }
+
     // total para paginação
     $countSql = "SELECT COUNT(*) FROM posts p";
+    if (count($whereClauses) > 0) {
+        $countSql .= ' WHERE ' . implode(' AND ', $whereClauses);
+    }
+    //echo '<pre>'.$countSql; die();
     $countStmt = $connection->prepare($countSql);
-    $countStmt->execute();
+    $countStmt->execute($params);
     $total = (int) $countStmt->fetchColumn();
 
-    // consulta principal (trazemos conteudo para gerar resumo, mas não retornamos inteiro)
-    $sql = "SELECT  p.id, 
-                    p.titulo, 
-                    p.autor, 
-                    p.`data`, 
-                    p.tipo, 
-                    p.categoria, 
-                    p.imagem, 
-                    p.conteudo, 
-                    p.slug, 
-                    p.tags
-                FROM posts p
-    ";
+    // consulta principal
+    $sql = "SELECT p.id, p.titulo, p.autor, p.`data`, p.tipo, p.categoria, p.imagem, p.conteudo, p.slug, p.tags
+            FROM posts p";
+    if (count($whereClauses) > 0) {
+        $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+    }
     $sql .= " ORDER BY p.`data` DESC";
     $offset = ($page - 1) * $per_page;
     $sql .= " LIMIT :limit OFFSET :offset";
 
     $stmt = $connection->prepare($sql);
+    foreach ($params as $k => $v) {
+        $stmt->bindValue($k, $v);
+    }
     $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     $rows = $stmt->fetchAll();
 
-    // monta o array final com resumo gerado
     $posts = array_map(function ($row) {
-        // formata data
         $dt = new DateTime($row['data']);
         $data_formatada = $dt->format('Y-m-d H:i');
-
         return [
             'id' => (string) $row['id'],
             'titulo' => $row['titulo'],
@@ -68,9 +91,9 @@ try {
             'autor' => $row['autor'],
             'data' => $data_formatada,
             'resumo' => gerar_resumo($row['conteudo']),
-            'imagem' => 'imagesposts'.'/'.$row['imagem'],
+            'imagem' => 'imagesposts' . '/' . $row['imagem'],
             'slug' => $row['slug'],
-            'tags' => isset($row['tags']) ? $row['tags'] : null, // opcional
+            'tags' => isset($row['tags']) ? $row['tags'] : null,
         ];
     }, $rows);
 

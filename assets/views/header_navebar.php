@@ -19,8 +19,8 @@
             </a>
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <form class="d-flex form-inline">
-                <input class="form-control form-control-sm" type="search" placeholder="Pesquisar" aria-label="Search">
+            <form class="d-flex form-inline" action="<?=BASE_URL?>/resultados.php" method="get" role="search">
+                <input name="pesquisa" class="form-control form-control-sm" type="search" placeholder="<?= $pesquisa ? $pesquisa : 'Pesquisar'?>" value="<?=$pesquisa?>" aria-label="Search">
                 <button class="btn btn-outline-secondary btn-sm" type="submit"> <i class="bi bi-search"></i></button>
             </form>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-auto">
