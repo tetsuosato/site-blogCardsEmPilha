@@ -21,7 +21,7 @@
                             <div class="mb-1 text-muted"><small><?= htmlspecialchars($post['autor']) ?></small> - <?= htmlspecialchars($post['data']) ?></div>
                         </p>
                         <p class="card-text"><?= htmlspecialchars($post['resumo']) ?></p>
-                        <a href="<?= htmlspecialchars(BASE_URL . '/postagem/' . $post['categoriaSlug'] . '/' . $post['slug'] . '/' . $post['id']) ?>" target="_blank" class="btn btn-dark theme-button">Leia mais</a>
+                        <a href="<?= htmlspecialchars(BASE_URL . '/postagem/' . $post['categoriaSlug'] . '/' . $post['slug'] . '/' . $post['id']) ?>" class="btn btn-dark theme-button">Leia mais</a>
                         </div>
                     </div>
                     </div>
@@ -50,7 +50,7 @@
                         <div class="mb-1 text-muted"><small><?= htmlspecialchars($post['autor']) ?></small> - <?= htmlspecialchars($post['data']) ?></div>
                     </p>
                     <p class="card-text"><?= htmlspecialchars($post['resumo']) ?></p>
-                    <a href="<?= htmlspecialchars(BASE_URL . '/postagem/' . $post['categoriaSlug'] . '/' . $post['slug'] . '/' . $post['id']) ?>" target="_blank" class="btn btn-dark theme-button">Leia mais</a>
+                    <a href="<?= htmlspecialchars(BASE_URL . '/postagem/' . $post['categoriaSlug'] . '/' . $post['slug'] . '/' . $post['id']) ?>" class="btn btn-dark theme-button">Leia mais</a>
                     </div>
                 </div>
                 <?php endforeach; ?>

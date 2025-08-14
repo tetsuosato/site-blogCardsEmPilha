@@ -2,7 +2,7 @@
     <div class="position-sticky" style="top: 3rem;">
         <div class="p-4 mb-3 rounded">
         <h4 class="pb-2 pt-2 mb-2 border-bottom">Sobre</h4>
-        <p class="mb-0"><em>Site do <a href="https://www.youtube.com/@VlogRock" target="_blank">Canal Vlog Rock</a> no Youtube, feito para quem curte um bom e velho Rock n' Roll seja lá qual for...</em></p>
+        <p class="mb-0"><em>Descrição do blog</em></p>
         </div>
 
         <div class="p-4">

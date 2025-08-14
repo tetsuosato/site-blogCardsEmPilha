@@ -8,11 +8,11 @@
 <footer class="container-fluid bg-dark text-light">
     <div class="row">
         <div class="bg-dark text-light text-center py-3 bg-dark">
-    <a href="https://www.youtube.com/@pablosato"    class="text-light mx-2 redesocial" target="_blank" aria-label="Youtube"   title="Inscreva-se em nosso canal no Youtube"><i class="bi bi-youtube   fs-4"></i></a>
-    <a href="https://www.instagram.com/pablo_sato"  class="text-light mx-2 redesocial" target="_blank" aria-label="Instagram" title="Siga-nos no Instagram">                <i class="bi bi-instagram fs-4"></i></a>
-    <a href="https://github.com/tetsuosato"         class="text-light mx-2 redesocial" target="_blank" aria-label="Facebook"  title="Curti a nossa Fanpage">                <i class="bi bi-facebook  fs-4"></i></a>
-    <a href="https://github.com/tetsuosato"         class="text-light mx-2 redesocial" target="_blank" aria-label="TikTok"    title="Siga-nos no TikTok">                   <i class="bi bi-tiktok    fs-4"></i></a>
-    <a href="https://github.com/tetsuosato"         class="text-light mx-2 redesocial" target="_blank" aria-label="X-Twitter" title="Siga-nos no X-Twitter">                <i class="bi bi-twitter-x fs-4"></i></a>
+            <a href="https://www.youtube.com/@pablosato"    class="text-light mx-2 redesocial" target="_blank" aria-label="Youtube"   title="Inscreva-se em nosso canal no Youtube"><i class="bi bi-youtube   fs-4"></i></a>
+            <a href="https://www.instagram.com/pablo_sato"  class="text-light mx-2 redesocial" target="_blank" aria-label="Instagram" title="Siga-nos no Instagram">                <i class="bi bi-instagram fs-4"></i></a>
+            <a href="https://github.com/tetsuosato"         class="text-light mx-2 redesocial" target="_blank" aria-label="Facebook"  title="Curti a nossa Fanpage">                <i class="bi bi-facebook  fs-4"></i></a>
+            <a href="https://github.com/tetsuosato"         class="text-light mx-2 redesocial" target="_blank" aria-label="TikTok"    title="Siga-nos no TikTok">                   <i class="bi bi-tiktok    fs-4"></i></a>
+            <a href="https://github.com/tetsuosato"         class="text-light mx-2 redesocial" target="_blank" aria-label="X-Twitter" title="Siga-nos no X-Twitter">                <i class="bi bi-twitter-x fs-4"></i></a>
         </div>
     </div>
 

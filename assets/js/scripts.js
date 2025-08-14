@@ -1,3 +1,35 @@
+// Resolução de dropdowns no header, para páginas de links amigáveis
+document.addEventListener('DOMContentLoaded', function () {
+  // Pega todos os toggles de dropdown
+  document.querySelectorAll('.nav-link.dropdown-toggle').forEach(function (toggle) {
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault(); // impede a navegação para "#"
+
+      // Fecha outros dropdowns abertos
+      document.querySelectorAll('.dropdown-menu.show').forEach(function (menu) {
+        if (menu !== toggle.nextElementSibling) {
+          menu.classList.remove('show');
+          menu.parentElement.classList.remove('show');
+        }
+      });
+
+      // Alterna o menu atual
+      toggle.parentElement.classList.toggle('show');
+      toggle.nextElementSibling.classList.toggle('show');
+    });
+  });
+
+  // Fecha dropdowns ao clicar fora
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.dropdown')) {
+      document.querySelectorAll('.dropdown-menu.show').forEach(function (menu) {
+        menu.classList.remove('show');
+        menu.parentElement.classList.remove('show');
+      });
+    }
+  });
+});
+
 
 // Função para esconder o header ao dar scroll
 function toggleHeaderOnScroll() {
