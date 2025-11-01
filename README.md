@@ -12,3 +12,7 @@ Inspired by open-source community
 
 /* SITE */
 Standards: HTML5, CSS3, JavaScript, PHP
+
+/* ATENÇÃO */
+Ao colocar em produção realizar as devidas trocas no
+.htaccess e lib/config

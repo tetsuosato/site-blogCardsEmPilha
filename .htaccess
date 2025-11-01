@@ -1,30 +1,38 @@
-# Não lista o conteúdo dos subdiretórios na ausência de um index.php
+# ------------------------------
+# Segurança básica e configurações
+# ------------------------------
 Options -Indexes
-
-# Liga o módulo do Apache de "Rewrite"
 RewriteEngine On
+# RewriteBase / # PRODUÇÃO
+RewriteBase /projetos/site-blogCardsEmPilha/
 
-# ---------------------------------------------------------------------
-# Força o Apache a criar a variável de ambiente para HTTP_AUTHORIZATION
-# ---------------------------------------------------------------------
+# Força variável HTTP_AUTHORIZATION (para APIs)
 RewriteCond %{HTTP:Authorization} ^(.+)$
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+# ------------------------------
+# Força HTTPS e redireciona www → não-www
+# ------------------------------
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP:X-Forwarded-SSL} !on
+RewriteCond %{HTTP_HOST} ^www\.blog\.com$ [NC]
+RewriteRule ^(.*)$ https://blog.com/$1 [R=301,L]
 
-# ---------------------------------------------------------------------
-# Redireciona URLs do tipo /postagem/categoria/slug/id para postagem.php
-# ---------------------------------------------------------------------
-RewriteEngine On
-RewriteBase /projetos/site-blogCardsEmPilha/
+# ------------------------------
+# URLs amigáveis para postagens
+# Exemplo: /postagem/categoria/slug/id → postagem.php?categoria/slug/id
+# ------------------------------
 RewriteRule ^postagem/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([0-9]+)/?$ postagem.php?$1/$2/$3 [L,QSA]
 
-
-# ----------------------------------------------------------
-# Remove a extensão .php para URLs mais amigáveis (opcional)
-# ----------------------------------------------------------
+# ------------------------------
+# Remove extensão .php das URLs
+# ------------------------------
 RewriteCond %{THE_REQUEST} \s/+(.+)\.php [NC]
 RewriteRule ^ /%1 [R=301,L]
 
+# ------------------------------
+# Permite acessar arquivos reais (CSS, JS, imagens) normalmente
+# ------------------------------
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L]
