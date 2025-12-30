@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Sao_Paulo');
+
 header('Content-Type: application/json; charset=utf-8');
 include('../lib/config.php');
 include('functions/functions.php');
@@ -16,6 +18,9 @@ try {
             PDO::ATTR_EMULATE_PREPARES => false
         ]
     );
+
+    // fuso horário Brasil
+    $connection->exec("SET time_zone = '-03:00'");
 
     // paginação
     $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, [
@@ -35,6 +40,9 @@ try {
     
     $whereClauses = [];
     $params = [];
+
+    // regra fixa: exibir apenas posts já publicados
+    $whereClauses[] = "p.`data` <= NOW()";
 
     // pesquisa livre
     if ($pesquisa !== null && $pesquisa !== '') {

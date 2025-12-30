@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Sao_Paulo');
+
 header('Content-Type: application/json; charset=utf-8');
 include('../lib/config.php');
 include('functions/functions.php');
@@ -17,6 +19,9 @@ try {
         ]
     );
 
+    // fuso horário Brasil
+    $connection->exec("SET time_zone = '-03:00'");
+
     // paginação
     $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, [
         'options' => ['default' => 1, 'min_range' => 1]
@@ -26,7 +31,7 @@ try {
     ]);
 
     // total para paginação
-    $countSql = "SELECT COUNT(*) FROM posts p";
+    $countSql = "SELECT COUNT(*) FROM posts p WHERE p.`data` <= NOW()";
     $countStmt = $connection->prepare($countSql);
     $countStmt->execute();
     $total = (int) $countStmt->fetchColumn();
@@ -43,6 +48,7 @@ try {
                     p.slug, 
                     p.tags
                 FROM posts p
+                WHERE p.`data` <= NOW()
     ";
     $sql .= " ORDER BY p.`data` DESC";
     $offset = ($page - 1) * $per_page;
