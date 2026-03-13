@@ -33,6 +33,6 @@ RewriteRule ^ /%1 [R=301,L]
 # ------------------------------
 # Permite acessar arquivos reais (CSS, JS, imagens) normalmente
 # ------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.+)$ $1.php [L]
+RewriteRule ^ pagina_nao_encontrada.php [L]

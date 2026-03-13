@@ -18,7 +18,7 @@
 
     <div class="row">
         <ul class="nav justify-content-center pb-3 mb-3">
-            <li><a href="<?=BASE_URL?>" class="nav-link px-2 text-light">&copy; 2025 Blog Pablo Sato</a></li>
+            <li><a href="<?=BASE_URL?>" class="nav-link px-2 text-light">&copy; <?=date('Y')?> Blog Pablo Sato</a></li>
             <li><a href="https://www.instagram.com/pablo_sato/" target="_blank" class="nav-link px-2 text-light"> - <small>Site Feito por <i class="bi bi-instagram"></i> pablo_sato</a></small></li>
         </ul>
     </div>
