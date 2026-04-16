@@ -25,7 +25,7 @@
 </footer>
 
 <!-- Bootstrap Bundle with Popper -->
-<script src="assets/bootstrap/5.0.2/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="<?= BASE_URL ?>/assets/bootstrap/5.0.2/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 <!-- Scripts -->
 <script src="<?= BASE_URL ?>/assets/js/scripts.js?v=<?=time()?>"></script>

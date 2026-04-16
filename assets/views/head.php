@@ -14,8 +14,8 @@
   <meta name="Blog do Pablo Sato - Postagem - elaborar">
   <meta property="og:title" content="Blog Pablo Sato - Postagem">
   <meta property="og:description" content="Blog Pablo Sato - Postagem">
-  <meta property="og:image" content="https://ENDERECOSITE/assets/image/logo_menu.png">
-  <meta property="og:url" content="https://ENDERECOSITE">
+  <meta property="og:image" content="<?= BASE_URL ?>/assets/image/logo_menu.png">
+  <meta property="og:url" content="<?= BASE_URL ?>">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Blog Pablo Sato">
 
@@ -24,8 +24,8 @@
   <meta name="twitter:site" content="@BlogPabloSato">
   <meta name="twitter:title" content="Blog Pablo Sato">
   <meta name="twitter:description" content="Blog Pablo Sato DESCRICAO">
-  <meta name="twitter:image" content="https://ENDERECOSITEassets/image/logo_menu.png">
-  <meta name="twitter:url" content="https://ENDERECOSITE">
+  <meta name="twitter:image" content="<?= BASE_URL ?>/assets/image/logo_menu.png">
+  <meta name="twitter:url" content="<?= BASE_URL ?>">
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" crossorigin="anonymous" href="<?= BASE_URL ?>/assets/bootstrap/5.0.2/css/bootstrap.min.css">
