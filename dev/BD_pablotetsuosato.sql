@@ -15,12 +15,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Copiando estrutura do banco de dados para pablotetusosatoblog
-DROP DATABASE IF EXISTS `pablotetusosatoblog`;
-CREATE DATABASE IF NOT EXISTS `pablotetusosatoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
-USE `pablotetusosatoblog`;
+-- Copiando estrutura do banco de dados para pablotetsuosatoblog
+DROP DATABASE IF EXISTS `pablotetsuosatoblog`;
+CREATE DATABASE IF NOT EXISTS `pablotetsuosatoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+USE `pablotetsuosatoblog`;
 
--- Copiando estrutura para tabela pablotetusosatoblog.destaques
+-- Copiando estrutura para tabela pablotetsuosatoblog.destaques
 DROP TABLE IF EXISTS `destaques`;
 CREATE TABLE IF NOT EXISTS `destaques` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -30,13 +30,14 @@ CREATE TABLE IF NOT EXISTS `destaques` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Copiando dados para a tabela pablotetusosatoblog.destaques: ~3 rows (aproximadamente)
-REPLACE INTO `destaques` (`id`, `destaques`, `ordem`, `idpost`) VALUES
+-- Copiando dados para a tabela pablotetsuosatoblog.destaques: ~3 rows (aproximadamente)
+DELETE FROM `destaques`;
+INSERT INTO `destaques` (`id`, `destaques`, `ordem`, `idpost`) VALUES
 	(1, '1', 1, 1),
 	(2, '1', 2, 2),
 	(5, '2', 1, 5);
 
--- Copiando estrutura para tabela pablotetusosatoblog.posts
+-- Copiando estrutura para tabela pablotetsuosatoblog.posts
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -53,8 +54,9 @@ CREATE TABLE IF NOT EXISTS `posts` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Copiando dados para a tabela pablotetusosatoblog.posts: ~55 rows (aproximadamente)
-REPLACE INTO `posts` (`id`, `titulo`, `slug`, `autor`, `data`, `tipo`, `categoria`, `imagem`, `urlimagem`, `conteudo`, `tags`) VALUES
+-- Copiando dados para a tabela pablotetsuosatoblog.posts: ~55 rows (aproximadamente)
+DELETE FROM `posts`;
+INSERT INTO `posts` (`id`, `titulo`, `slug`, `autor`, `data`, `tipo`, `categoria`, `imagem`, `urlimagem`, `conteudo`, `tags`) VALUES
 	(1, 'Minha Primeira Postagem:1', 'titulo-da-postagem-1', 'Pablo Sato', '2025-07-31 18:30:00', 'Vídeo', 'noticias', 'postagem1.webp', NULL, '<p> <strong>Lorem ipsum 1</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, \r\n            urna tortor tincidunt arcu, vel porttitor nibh tellus nec sem.\r\n            Aenean quis magna sapien. Praesent ullamcorper, massa at lacinia tempus, justo nunc dapibus quam, \r\n            a malesuada odio lorem ut justo\r\n            Proin vel purus nec libero lacinia convallis. \r\n            Fusce commodo magna sed fermentum convallis. Morbi rhoncus nulla nec ex imperdiet mattis\r\n            Mauris congue finibus turpis nec ultricies. Vestibulum ante ipsum primis in faucibus orci \r\n            luctus et ultrices posuere cubilia curae.\r\n</p>', '["Dicas", "Rock", "Punk", "Sertanejo"]'),
 	(2, 'Minha Primeira Postagem:2', 'titulo-da-postagem-2', 'Pablo Sato', '2025-07-31 18:30:30', 'Vídeo', 'dicas', 'postagem2.webp', NULL, '<p><strong>Lorem ipsum 2</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, \r\n            urna tortor tincidunt arcu, vel porttitor nibh tellus nec sem.\r\n            Aenean quis magna sapien. Praesent ullamcorper, massa at lacinia tempus, justo nunc dapibus quam, \r\n            a malesuada odio lorem ut justo\r\n            Proin vel purus nec libero lacinia convallis. \r\n            Fusce commodo magna sed fermentum convallis. Morbi rhoncus nulla nec ex imperdiet mattis\r\n            Mauris congue finibus turpis nec ultricies. Vestibulum ante ipsum primis in faucibus orci \r\n            luctus et ultrices posuere cubilia curae.\r\n     </p>', '["Dicas", "Rock", "Metal"]'),
 	(3, 'Minha Primeira Postagem:3', 'titulo-da-postagem-3', 'Pablo Sato', '2025-07-31 18:30:30', 'Vídeo', 'video', 'postagem3.webp', NULL, '<p><strong>Lorem ipsum 3</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
@@ -110,6 +112,29 @@ REPLACE INTO `posts` (`id`, `titulo`, `slug`, `autor`, `data`, `tipo`, `categori
 	(53, 'Minha Primeira Postagem:53', 'titulo-da-postagem-53', 'Pablo Sato', '2025-07-31 23:03:59', 'Vídeo', 'noticias', 'postagem3.webp', NULL, '<p><strong>Lorem ipsum 53</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
 	(54, 'Minha Primeira Postagem:54', 'titulo-da-postagem-54', 'Pablo Sato', '2025-07-31 23:04:59', 'Vídeo', 'noticias', 'postagem4.webp', NULL, '<p><strong>Lorem ipsum 54</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]'),
 	(55, 'Minha Primeira Postagem:55', 'titulo-da-postagem-55', 'Pablo Sato', '2025-07-31 23:05:59', 'Vídeo', 'noticias', 'postagem5.webp', NULL, '<p><strong>Lorem ipsum 55</strong> dolor sit amet, consectetur adipiscing elit. Vivamus suscipit, nisl ut vehicula hendrerit, ', '["Dicas", "Rock", "Metal"]');
+
+-- Copiando estrutura para tabela pablotetsuosatoblog.users
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'User ID',
+  `name` text NOT NULL COMMENT 'Name',
+  `lastname` text NOT NULL COMMENT 'Last name',
+  `user` text NOT NULL COMMENT 'User to access the system',
+  `password` text NOT NULL COMMENT 'Password to access the system',
+  `email` text NOT NULL COMMENT 'Email  to access the system',
+  `token` text NOT NULL COMMENT 'Token to Authenticate your Access',
+  `token_expiry` datetime NOT NULL COMMENT 'Date and time the token will expire',
+  `data_creation` datetime NOT NULL COMMENT 'Date and time the user was created',
+  `data_login` datetime NOT NULL COMMENT 'Date and time the user accessed the system',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Copiando dados para a tabela pablotetsuosatoblog.users: ~3 rows (aproximadamente)
+DELETE FROM `users`;
+INSERT INTO `users` (`id`, `name`, `lastname`, `user`, `password`, `email`, `token`, `token_expiry`, `data_creation`, `data_login`) VALUES
+	(1, 'Nome do Admin', 'Sobrenome do Admin', 'admin', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste@teste.com', '349dc110cd7e7200cc8fd1b0cab69144008359582fbb172e641730dd5d4755df', '0000-00-00 00:00:00', '2024-04-27 12:00:00', '2024-05-07 23:53:06'),
+	(2, 'Teste Nome', 'Teste Sobrenome', 'teste', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste2@teste.com', '', '0000-00-00 00:00:00', '2024-04-27 12:01:00', '0000-00-00 00:00:00'),
+	(3, 'pablo tetsuo', 'sato', 'pablo', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'pablosato@ymail.com', '614f015796c9131e3107bb2cd687e3c614a8350b761f15b102364b1142cdb8ea', '2026-04-16 23:19:23', '2024-04-27 12:02:00', '2026-04-15 23:19:23');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
