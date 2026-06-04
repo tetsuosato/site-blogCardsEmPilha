@@ -1,5 +1,5 @@
 <head>
-  <title><?= isset($title) ? $title : '"Blog Pablo Sato'; ?></title>
+  <title><?= isset($title) ? $title : 'Blog Pablo Sato'; ?></title>
   <link rel="icon" href="<?= BASE_URL ?>/assets/image/favicon.png">
 
   <!-- Required meta tags -->
@@ -11,9 +11,8 @@
   <meta name="robots" content="index, follow">
 
   <!-- Open Graph Tags -->
-  <meta name="Blog do Pablo Sato - Postagem - elaborar">
-  <meta property="og:title" content="Blog Pablo Sato - Postagem">
-  <meta property="og:description" content="Blog Pablo Sato - Postagem">
+  <meta property="og:title" content="Blog Pablo Sato">
+  <meta property="og:description" content="Blog Pablo Sato">
   <meta property="og:image" content="<?= BASE_URL ?>/assets/image/logo_menu.png">
   <meta property="og:url" content="<?= BASE_URL ?>">
   <meta property="og:type" content="website">
@@ -21,20 +20,20 @@
 
   <!-- Twitter Card Tags -->
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@BlogPabloSato">
+  <meta name="twitter:site" content="@pablo_sato">
   <meta name="twitter:title" content="Blog Pablo Sato">
-  <meta name="twitter:description" content="Blog Pablo Sato DESCRICAO">
+  <meta name="twitter:description" content="Blog Pablo Sato">
   <meta name="twitter:image" content="<?= BASE_URL ?>/assets/image/logo_menu.png">
   <meta name="twitter:url" content="<?= BASE_URL ?>">
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" crossorigin="anonymous" href="<?= BASE_URL ?>/assets/bootstrap/5.0.2/css/bootstrap.min.css">
+  <link rel="stylesheet" crossorigin="anonymous" href="<?= BASE_URL ?>/assets/bootstrap/5.3.8/css/bootstrap.min.css">
 
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap-icons/1.13.1/bootstrap-icons.css">
 
-
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="<?= BASE_URL ?>/assets/css/styles.css?v=<?=time()?>">
 
+  <script>const BASE_URL = '<?= BASE_URL ?>';</script>
 </head>

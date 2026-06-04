@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const pesquisa  = urlParams.get('pesquisa') || '';
+
     const container = document.getElementById('lista-postagens');
     const btnMais   = document.getElementById('btn-carregar-mais');
+
     let currentPage = 1;
     const perPage   = 10;
     let loading     = false;
@@ -47,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btnMais.textContent = 'Carregando...';
 
         try {
-            const resp = await fetch(BASE_URL + '/api/posts-index.php?page=' + currentPage + '&per_page=' + perPage);
+            const resp = await fetch(BASE_URL + '/api/posts-resultados.php?page=' + currentPage + '&per_page=' + perPage + '&pesquisa=' + encodeURIComponent(pesquisa));
             if (!resp.ok) throw new Error('HTTP ' + resp.status);
             const data = await resp.json();
 

@@ -1,122 +1,83 @@
-// Resolução de dropdowns no header, para páginas de links amigáveis
-document.addEventListener('DOMContentLoaded', function () {
-  // Pega todos os toggles de dropdown
-  document.querySelectorAll('.nav-link.dropdown-toggle').forEach(function (toggle) {
-    toggle.addEventListener('click', function (e) {
-      e.preventDefault(); // impede a navegação para "#"
+// Sincroniza tema ao carregar (lê classe do body definida pelo PHP via cookie)
+(function () {
+    var body = document.body;
+    var icon = document.getElementById('toggleThemeIcon');
+    var themeBtn = document.getElementById('toggleThemeBtn');
+    if (!icon || !themeBtn) return;
 
-      // Fecha outros dropdowns abertos
-      document.querySelectorAll('.dropdown-menu.show').forEach(function (menu) {
-        if (menu !== toggle.nextElementSibling) {
-          menu.classList.remove('show');
-          menu.parentElement.classList.remove('show');
-        }
-      });
+    var isDark = body.classList.contains('bg-dark');
 
-      // Alterna o menu atual
-      toggle.parentElement.classList.toggle('show');
-      toggle.nextElementSibling.classList.toggle('show');
-    });
-  });
+    if (isDark) {
+        icon.classList.remove('bi-moon-fill');
+        icon.classList.add('bi-sun-fill');
+        themeBtn.style.color = '#ffc107';
 
-  // Fecha dropdowns ao clicar fora
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('.dropdown')) {
-      document.querySelectorAll('.dropdown-menu.show').forEach(function (menu) {
-        menu.classList.remove('show');
-        menu.parentElement.classList.remove('show');
-      });
-    }
-  });
-});
-
-
-// Função para esconder o header ao dar scroll
-function toggleHeaderOnScroll() {
-  var header = document.querySelector('header');
-  var lastScrollTop = 0;
-  var isHeaderHidden = false;
-
-  window.addEventListener('scroll', function () {
-    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    if (scrollTop > lastScrollTop) {
-      // Rolando para baixo
-      if (isHeaderHidden) {
-        // Mostrar o header
-        setTimeout(function () {
-          header.style.display = 'block';
-          isHeaderHidden = false;
-        }, 1000); // 1000 milissegundos (1 segundo), ajuste conforme necessário
-      }
+        document.querySelectorAll('.theme-card').forEach(function (card) {
+            card.classList.add('bg-dark', 'text-light');
+            card.classList.remove('bg-light', 'text-dark');
+        });
+        document.querySelectorAll('.theme-button').forEach(function (btn) {
+            btn.classList.remove('btn-dark');
+            btn.classList.add('btn-secondary');
+        });
     } else {
-      // Rolando para cima
-      if (!isHeaderHidden) {
-        // Ocultar o header
-        header.style.display = 'none';
-        isHeaderHidden = true;
-      }
+        themeBtn.style.color = '#212529';
     }
+})();
 
-    lastScrollTop = scrollTop;
-  });
-}
-
-// Trocar tema do site
+// Trocar tema e salvar em cookie
 document.getElementById('toggleThemeBtn').addEventListener('click', function () {
-  // Trocar entre os temas bg-light e bg-dark
-  document.body.classList.toggle('bg-light');
-  document.body.classList.toggle('bg-dark');
-  document.body.classList.toggle('text-light');
-  document.body.classList.toggle('text-dark');
+    var body = document.body;
+    var icon = document.getElementById('toggleThemeIcon');
+    var themeBtn = document.getElementById('toggleThemeBtn');
 
-  // Detectar tema atual uma única vez
-  const isDarkTheme = document.body.classList.contains('bg-dark');
+    body.classList.toggle('bg-light');
+    body.classList.toggle('bg-dark');
+    body.classList.toggle('text-light');
+    body.classList.toggle('text-dark');
 
-  // Trocar classe dos botões com base no tema
-  document.querySelectorAll('.theme-button').forEach(function (button) {
-    if (button.classList.contains('btn-secondary')) {
-      button.classList.remove('btn-secondary');
-      button.classList.add('btn-dark');
-    } else {
-      button.classList.remove('btn-dark');
-      button.classList.add('btn-secondary');
-    }
-  });
+    var isDarkTheme = body.classList.contains('bg-dark');
 
-  // Trocar a cor da borda das postagens
-  document.querySelectorAll('.postagemindex').forEach(function (box) {
-    box.style.borderColor = isDarkTheme ? '#ffffff' : '#212529';
-  });
+    // Salvar preferência em cookie (365 dias)
+    var expires = new Date();
+    expires.setFullYear(expires.getFullYear() + 1);
+    document.cookie = 'tema=' + (isDarkTheme ? 'dark' : 'light') + '; expires=' + expires.toUTCString() + '; path=/';
 
-  // Trocar cor de fundo e texto dos cards
-  document.querySelectorAll('.theme-card').forEach(function (card) {
+    // Ícone
     if (isDarkTheme) {
-      card.classList.add('bg-dark', 'text-light');
-      card.classList.remove('bg-light', 'text-dark');
+        icon.classList.remove('bi-moon-fill');
+        icon.classList.add('bi-sun-fill');
+        themeBtn.style.color = '#ffc107';
     } else {
-      card.classList.add('bg-light', 'text-dark');
-      card.classList.remove('bg-dark', 'text-light');
+        icon.classList.remove('bi-sun-fill');
+        icon.classList.add('bi-moon-fill');
+        themeBtn.style.color = '#212529';
     }
-  });
 
-  // Trocar tema do botão "Conferir Mais"
-  document.querySelectorAll('.theme-outline-button').forEach(function (btn) {
-    if (btn.classList.contains('btn-outline-dark')) {
-      btn.classList.remove('btn-outline-dark');
-      btn.classList.add('btn-outline-light');
-    } else {
-      btn.classList.remove('btn-outline-light');
-      btn.classList.add('btn-outline-dark');
-    }
-  });
+    // Botões tema
+    document.querySelectorAll('.theme-button').forEach(function (btn) {
+        if (isDarkTheme) {
+            btn.classList.remove('btn-dark');
+            btn.classList.add('btn-secondary');
+        } else {
+            btn.classList.remove('btn-secondary');
+            btn.classList.add('btn-dark');
+        }
+    });
 
-  // Trocar cor do <hr> conforme o tema
-  document.querySelectorAll('.theme-hr').forEach(hr => {
-    hr.style.borderTopColor = isDarkTheme ? '#ffffff' : '#212529';
-  });
-  
-  // Alterar cor do próprio botão de troca de tema
-  const currentColor = toggleThemeBtn.style.color;
-  toggleThemeBtn.style.color = currentColor === 'white' ? 'black' : 'white';
+    // Cards
+    document.querySelectorAll('.theme-card').forEach(function (card) {
+        if (isDarkTheme) {
+            card.classList.add('bg-dark', 'text-light');
+            card.classList.remove('bg-light', 'text-dark');
+        } else {
+            card.classList.add('bg-light', 'text-dark');
+            card.classList.remove('bg-dark', 'text-light');
+        }
+    });
+
+    // HR
+    document.querySelectorAll('.theme-hr').forEach(function (hr) {
+        hr.style.borderTopColor = isDarkTheme ? '#ffffff' : '#212529';
+    });
 });

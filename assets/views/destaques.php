@@ -1,66 +1,38 @@
 <!-- DESTAQUES -->
-<div class="container">
-    <div class="row mb-2">
-        
-        <!-- Destaques 1 -->
-        <div class="col-md-8">
-            <h3 class="pb-2 pt-2 mb-2 border-bottom">Destaques</h3>
-
-            <?php if (isset($destaques['destaque1']) && is_array($destaques['destaque1'])): ?>
-                <?php foreach ($destaques['destaque1'] as $post): ?>
-                <div class="card mb-3 shadow theme-card">
-                    <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="<?= htmlspecialchars(BASE_URL . '/' . $post['imagem'] .'?t='.mt_rand(1, 1000)) ?>" class="img-fluid rounded p-2" alt="<?= htmlspecialchars($post['titulo']) ?>">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                        <h5 class="card-title"><?= htmlspecialchars($post['titulo']) ?></h5>
-                        <p>
-                            <strong><?= htmlspecialchars($post['tipo']) ?></strong> - <strong class="text-secondary"><?= htmlspecialchars($post['categoria']) ?></strong>
-                            <div class="mb-1 text-muted"><small><?= htmlspecialchars($post['autor']) ?></small> - <?= htmlspecialchars($post['data']) ?></div>
-                        </p>
-                        <p class="card-text"><?= htmlspecialchars($post['resumo']) ?></p>
-                        <a href="<?= htmlspecialchars(BASE_URL . '/postagem/' . $post['categoriaSlug'] . '/' . $post['slug'] . '/' . $post['id']) ?>" class="btn btn-dark theme-button">Leia mais</a>
-                        </div>
-                    </div>
-                    </div>
+<div class="container mt-4 mb-2">
+    <h3 class="pb-2 mb-3 border-bottom fw-bold">Destaques</h3>
+    <div class="row g-3">
+        <?php
+        $todos = array_merge(
+            isset($destaques['destaque1']) && is_array($destaques['destaque1']) ? $destaques['destaque1'] : [],
+            isset($destaques['destaque2']) && is_array($destaques['destaque2']) ? $destaques['destaque2'] : []
+        );
+        foreach ($todos as $post):
+            $urlPost = htmlspecialchars(BASE_URL . '/postagem/' . $post['categoriaSlug'] . '/' . $post['slug'] . '/' . $post['id']);
+        ?>
+        <div class="col-md-4">
+            <div class="card h-100 theme-card">
+                <div class="card-img-wrapper">
+                    <img src="<?= htmlspecialchars(BASE_URL . '/' . $post['imagem'] . '?t=' . mt_rand(1,1000)) ?>"
+                         class="card-img-top" alt="<?= htmlspecialchars($post['titulo']) ?>">
+                    <span class="card-categoria-badge"><?= htmlspecialchars($post['categoria']) ?></span>
+                    <h5 class="card-img-title"><?= htmlspecialchars($post['titulo']) ?></h5>
                 </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="text-muted">Nenhum destaque encontrado.</p>
-            <?php endif; ?>
-
-        </div><!-- col-md-8 -->
-        <!-- FINAL - Destaques 1 -->
-
-        <!-- Destaques 2 -->
-        <div class="col-sm-4 align-items-center justify-content-center">
-
-            <h3 class="pb-2 pt-2 mb-2 border-bottom">Recomendado</h3>
-
-            <?php if (isset($destaques['destaque2']) && is_array($destaques['destaque2'])): ?>
-                <?php foreach ($destaques['destaque2'] as $post): ?>
-                <div class="card mb-3 shadow theme-card">
-                    <img src="<?= htmlspecialchars(BASE_URL . '/' . $post['imagem'] .'?t='.mt_rand(1, 1000)) ?>" class="card-img-top rounded" alt="<?= htmlspecialchars($post['titulo']) ?>">
-                    <div class="card-body">
-                    <h5 class="card-title"><?= htmlspecialchars($post['titulo']) ?></h5>
-                    <p>
-                        <strong><?= htmlspecialchars($post['tipo']) ?></strong> - <strong class="text-secondary"><?= htmlspecialchars($post['categoria']) ?></strong>
-                        <div class="mb-1 text-muted"><small><?= htmlspecialchars($post['autor']) ?></small> - <?= htmlspecialchars($post['data']) ?></div>
+                <div class="card-body d-flex flex-column">
+                    <p class="card-meta">
+                        <i class="bi bi-person-fill"></i> <?= htmlspecialchars($post['autor']) ?>
+                        &nbsp;&middot;&nbsp;
+                        <i class="bi bi-calendar3"></i> <?= htmlspecialchars($post['data']) ?>
                     </p>
-                    <p class="card-text"><?= htmlspecialchars($post['resumo']) ?></p>
-                    <a href="<?= htmlspecialchars(BASE_URL . '/postagem/' . $post['categoriaSlug'] . '/' . $post['slug'] . '/' . $post['id']) ?>" class="btn btn-dark theme-button">Leia mais</a>
-                    </div>
+                    <p class="card-text flex-grow-1"><?= htmlspecialchars($post['resumo']) ?></p>
+                    <a href="<?= $urlPost ?>" class="card-read-more stretched-link mt-auto">Leia mais <i class="bi bi-arrow-right"></i></a>
                 </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="text-muted">Nenhum destaque encontrado.</p>
-            <?php endif; ?>
-
-        </div><!-- col-sm-4 -->
-        <!-- FINAL - Destaques 2 -->
-        
-    </div><!-- row mb-2 -->
-</div><!-- container -->
+            </div>
+        </div>
+        <?php endforeach; ?>
+        <?php if (empty($todos)): ?>
+            <p class="text-muted">Nenhum destaque encontrado.</p>
+        <?php endif; ?>
+    </div>
+</div>
 <!-- FINAL - DESTAQUES -->

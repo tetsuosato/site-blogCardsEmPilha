@@ -1,25 +1,40 @@
-<div class="col-md-3 g-0 mb-4 mt-2 border rounded shadow colunafixaindexcol">
-    <div class="position-sticky" style="top: 3rem;">
-        <div class="p-4 mb-3 rounded">
-        <h4 class="pb-2 pt-2 mb-2 border-bottom">Sobre</h4>
-        <p class="mb-0"><em>Descrição do blog</em></p>
+<div class="col-md-3 mb-4 mt-2">
+    <div class="position-sticky d-flex flex-column gap-3" style="top: 4.5rem;">
+
+        <!-- Perfil -->
+        <div class="sidebar-block theme-card">
+            <img src="<?= BASE_URL ?>/assets/image/avatar.png" alt="Blog Pablo Sato" class="sidebar-profile-logo">
+            <div class="sidebar-profile">
+                <h6>Blog Pablo Sato</h6>
+                <p>Tecnologia, desenvolvimento e curiosidades — conteúdo feito com paixão por quem gosta de aprender.</p>
+                <a href="https://github.com/tetsuosato" target="_blank" rel="noopener" class="btn-youtube" style="background:#24292e;">
+                    <i class="bi bi-github"></i> GitHub
+                </a>
+            </div>
         </div>
 
-        <div class="p-4">
-        <h4 class="pb-2 pt-2 mb-2 border-bottom">Veja mais</h4>
-        <ol class="list-unstyled mb-0">
-            <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Tags de postagens 1</a></li>
-            <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Postagens antigas 1</a></li>
-            <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Postagens antigas 2</a></li>
-        </ol>
+        <!-- Recentes -->
+        <div class="sidebar-block theme-card">
+            <p class="sidebar-title">Recentes</p>
+            <div id="sidebar-recentes"></div>
         </div>
 
-        <div class="p-4">
-        <h4 class="pb-2 pt-2 mb-2 border-bottom">Confira Também</h4>
-        <ol class="list-unstyled">
-            <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Outras Recomendações 1</a></li>
-            <li><a href="<?= BASE_URL ?>/pagina_construcao.php" target="_blank" class="theme-link">Outras Recomendações 2</a></li>
-        </ol>
+        <!-- Categorias -->
+        <div class="sidebar-block theme-card">
+            <p class="sidebar-title">Categorias</p>
+            <div id="sidebar-categorias" class="sidebar-tags"></div>
         </div>
+
+        <!-- Redes Sociais -->
+        <div class="sidebar-block theme-card">
+            <p class="sidebar-title">Siga nas Redes</p>
+            <div class="sidebar-social-links">
+                <a href="https://www.youtube.com/@pablosato"    target="_blank" rel="noopener" class="sidebar-social-link yt"><i class="bi bi-youtube   fs-5"></i> YouTube</a>
+                <a href="https://www.instagram.com/pablo_sato/" target="_blank" rel="noopener" class="sidebar-social-link ig"><i class="bi bi-instagram fs-5"></i> Instagram</a>
+                <a href="https://github.com/tetsuosato"         target="_blank" rel="noopener" class="sidebar-social-link gh"><i class="bi bi-github    fs-5"></i> GitHub</a>
+                <a href="https://x.com/pablo_sato"              target="_blank" rel="noopener" class="sidebar-social-link xw"><i class="bi bi-twitter-x fs-5"></i> X (Twitter)</a>
+            </div>
+        </div>
+
     </div>
 </div><!-- col-md-3 -->
