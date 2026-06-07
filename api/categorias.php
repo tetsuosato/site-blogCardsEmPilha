@@ -10,7 +10,11 @@ try {
     );
 
     $stmt = $connection->query(
-        "SELECT categoria, COUNT(*) as total FROM posts GROUP BY categoria ORDER BY total DESC"
+        "SELECT c.Nome AS categoria, COUNT(*) AS total
+         FROM posts p
+         LEFT JOIN categoria c ON c.id = p.categoria
+         GROUP BY p.categoria, c.Nome
+         ORDER BY total DESC"
     );
 
     echo json_encode($stmt->fetchAll(), JSON_UNESCAPED_UNICODE);

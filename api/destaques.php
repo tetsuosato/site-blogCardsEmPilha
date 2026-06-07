@@ -18,9 +18,15 @@ try {
 
     $sql = "SELECT  d.`destaques`,
                     d.ordem,
-                    p.* 
+                    p.id, p.titulo, p.`data`, p.imagem, p.urlimagem, p.conteudo, p.slug, p.tags,
+                    u.nickname AS autor,
+                    t.Nome AS tipo,
+                    c.Nome AS categoria
                 FROM destaques d
                     LEFT JOIN posts p ON d.idpost = p.id
+                    LEFT JOIN users u ON u.id = p.autor
+                    LEFT JOIN tipo t ON t.id = p.tipo
+                    LEFT JOIN categoria c ON c.id = p.categoria
                     ORDER BY destaques ASC, ordem ASC
     ";
     $stmt = $connection->prepare($sql);

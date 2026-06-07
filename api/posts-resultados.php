@@ -49,9 +49,9 @@ try {
         $whereClauses[] = "(
             p.titulo LIKE :pesquisa1
             OR p.slug LIKE :pesquisa2
-            OR p.autor LIKE :pesquisa3
-            OR p.tipo LIKE :pesquisa4
-            OR p.categoria LIKE :pesquisa5
+            OR u.nickname LIKE :pesquisa3
+            OR t.Nome LIKE :pesquisa4
+            OR c.Nome LIKE :pesquisa5
             OR p.tags LIKE :pesquisa6
         )";
         for ($i = 1; $i <= 6; $i++) {
@@ -59,19 +59,25 @@ try {
         }
     }
 
+    $joins = "LEFT JOIN users u ON u.id = p.autor
+              LEFT JOIN tipo t ON t.id = p.tipo
+              LEFT JOIN categoria c ON c.id = p.categoria";
+
     // total para paginação
-    $countSql = "SELECT COUNT(*) FROM posts p";
+    $countSql = "SELECT COUNT(*) FROM posts p $joins";
     if (count($whereClauses) > 0) {
         $countSql .= ' WHERE ' . implode(' AND ', $whereClauses);
     }
-    //echo '<pre>'.$countSql; die();
     $countStmt = $connection->prepare($countSql);
     $countStmt->execute($params);
     $total = (int) $countStmt->fetchColumn();
 
     // consulta principal
-    $sql = "SELECT p.id, p.titulo, p.autor, p.`data`, p.tipo, p.categoria, p.imagem, p.conteudo, p.slug, p.tags
-            FROM posts p";
+    $sql = "SELECT p.id, p.titulo, p.`data`, p.imagem, p.conteudo, p.slug, p.tags,
+                   u.nickname AS autor,
+                   t.Nome AS tipo,
+                   c.Nome AS categoria
+            FROM posts p $joins";
     if (count($whereClauses) > 0) {
         $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
     }

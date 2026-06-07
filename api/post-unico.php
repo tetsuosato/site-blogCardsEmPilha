@@ -39,7 +39,16 @@ try {
     }
 
 
-    $sql = "SELECT * FROM posts WHERE id = :id AND slug = :slug LIMIT 1";
+    $sql = "SELECT p.*,
+                   u.nickname AS autor,
+                   t.Nome AS tipo,
+                   c.Nome AS categoria
+            FROM posts p
+            LEFT JOIN users u ON u.id = p.autor
+            LEFT JOIN tipo t ON t.id = p.tipo
+            LEFT JOIN categoria c ON c.id = p.categoria
+            WHERE p.id = :id AND p.slug = :slug
+            LIMIT 1";
     $stmt = $connection->prepare($sql);
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->bindValue(':slug', $slug, PDO::PARAM_STR);

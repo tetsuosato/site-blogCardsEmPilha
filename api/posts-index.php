@@ -37,17 +37,20 @@ try {
     $total = (int) $countStmt->fetchColumn();
 
     // consulta principal (trazemos conteudo para gerar resumo, mas não retornamos inteiro)
-    $sql = "SELECT  p.id, 
-                    p.titulo, 
-                    p.autor, 
-                    p.`data`, 
-                    p.tipo, 
-                    p.categoria, 
-                    p.imagem, 
-                    p.conteudo, 
-                    p.slug, 
-                    p.tags
+    $sql = "SELECT  p.id,
+                    p.titulo,
+                    p.`data`,
+                    p.imagem,
+                    p.conteudo,
+                    p.slug,
+                    p.tags,
+                    u.nickname AS autor,
+                    t.Nome AS tipo,
+                    c.Nome AS categoria
                 FROM posts p
+                LEFT JOIN users u ON u.id = p.autor
+                LEFT JOIN tipo t ON t.id = p.tipo
+                LEFT JOIN categoria c ON c.id = p.categoria
                 WHERE p.`data` <= NOW()
     ";
     $sql .= " ORDER BY p.`data` DESC";

@@ -33,10 +33,16 @@ try {
         $params[] = $id;
 
         $stmt = $connection->prepare(
-            "SELECT id, titulo, slug, conteudo, imagem, autor, categoria, tipo, data
-             FROM posts
-             WHERE ($likes) AND id != ?
-             ORDER BY data DESC
+            "SELECT p.id, p.titulo, p.slug, p.conteudo, p.imagem, p.data,
+                    u.nickname AS autor,
+                    t.Nome AS tipo,
+                    c.Nome AS categoria
+             FROM posts p
+             LEFT JOIN users u ON u.id = p.autor
+             LEFT JOIN tipo t ON t.id = p.tipo
+             LEFT JOIN categoria c ON c.id = p.categoria
+             WHERE ($likes) AND p.id != ?
+             ORDER BY p.data DESC
              LIMIT 3"
         );
         $stmt->execute(array_values($params));
@@ -51,10 +57,16 @@ try {
         $params2      = array_merge([$categoria], $idsExcluir);
 
         $stmt2 = $connection->prepare(
-            "SELECT id, titulo, slug, conteudo, imagem, autor, categoria, tipo, data
-             FROM posts
-             WHERE categoria = ? AND id NOT IN ($placeholders)
-             ORDER BY data DESC
+            "SELECT p.id, p.titulo, p.slug, p.conteudo, p.imagem, p.data,
+                    u.nickname AS autor,
+                    t.Nome AS tipo,
+                    c.Nome AS categoria
+             FROM posts p
+             LEFT JOIN users u ON u.id = p.autor
+             LEFT JOIN tipo t ON t.id = p.tipo
+             LEFT JOIN categoria c ON c.id = p.categoria
+             WHERE c.Nome = ? AND p.id NOT IN ($placeholders)
+             ORDER BY p.data DESC
              LIMIT $faltam"
         );
         $stmt2->execute($params2);
