@@ -15,11 +15,14 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
 } else {
     define('BASE_URL', 'https://meusite.com'); // Para links
 
-    // Constantes do sistema AMBIENTE DEV
-    // ENVIRONMENT DEV system constants
-    // include '../../etc/blogCardsEmPilha.com/configProducao.php'; // Inclui o arquivo de configuração com as constantes de produção
-    // 
-    include 'configProducao.php'; // CONFIGURAÇÃO PARA SUBIR NO GIT-HUB PUBLICO
+    // Constantes do sistema AMBIENTE PRODUÇÃO
+    // PRODUCTION system constants
+    //
+    // O caminho é ancorado em __DIR__ (a pasta deste arquivo) para não depender de
+    // qual página foi acessada. Sem isso, o PHP procuraria primeiro no diretório da
+    // página chamadora, e um arquivo de mesmo nome em outra pasta seria carregado no
+    // lugar deste, silenciosamente.
+    require_once __DIR__ . '/configProducao.php'; // CONFIGURAÇÃO PARA SUBIR NO GIT-HUB PUBLICO
 }
 
 // Tema persistido via cookie

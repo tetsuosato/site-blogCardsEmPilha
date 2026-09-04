@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `categoria` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Copiando dados para a tabela pablotetsuosatoblog.categoria: ~3 rows (aproximadamente)
+-- Copiando dados para a tabela pablotetsuosatoblog.categoria: ~2 rows (aproximadamente)
 DELETE FROM `categoria`;
 INSERT INTO `categoria` (`id`, `Nome`) VALUES
 	(1, 'Notícias'),
@@ -152,6 +152,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user` text NOT NULL COMMENT 'User to access the system',
   `password` text NOT NULL COMMENT 'Password to access the system',
   `email` text NOT NULL COMMENT 'Email  to access the system',
+  `ativo` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Usuário ativo (1) ou inativo (0)',
+  `id_grupo` int(11) DEFAULT NULL COMMENT 'Grupo de permissões (reservado)',
   `token` text NOT NULL COMMENT 'Token to Authenticate your Access',
   `token_expiry` datetime NOT NULL COMMENT 'Date and time the token will expire',
   `data_creation` datetime NOT NULL COMMENT 'Date and time the user was created',
@@ -161,10 +163,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Copiando dados para a tabela pablotetsuosatoblog.users: ~3 rows (aproximadamente)
 DELETE FROM `users`;
-INSERT INTO `users` (`id`, `name`, `lastname`, `nickname`, `user`, `password`, `email`, `token`, `token_expiry`, `data_creation`, `data_login`) VALUES
-	(1, 'Nome do Admin', 'Sobrenome do Admin', 'Admin User', 'admin', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste@teste.com', '349dc110cd7e7200cc8fd1b0cab69144008359582fbb172e641730dd5d4755df', '0000-00-00 00:00:00', '2024-04-27 12:00:00', '2024-05-07 23:53:06'),
-	(2, 'Teste Nome', 'Teste Sobrenome', 'Nome Teste', 'teste', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste2@teste.com', '34d10485ba7d84fdacc60b5cf031912fc2b97cac91eb9c603443316563662186', '0000-00-00 00:00:00', '2024-04-27 12:01:00', '0000-00-00 00:00:00'),
-	(3, 'pablo tetsuo', 'sato', 'Pablo Sato', 'pablo', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'pablosato@ymail.com', '34d10485ba7d84fdacc60b5cf031912fc2b97cac91eb9c603443316563662186', '2026-06-08 16:13:31', '2024-04-27 12:02:00', '2026-06-07 16:13:31');
+INSERT INTO `users` (`id`, `name`, `lastname`, `nickname`, `user`, `password`, `email`, `ativo`, `id_grupo`, `token`, `token_expiry`, `data_creation`, `data_login`) VALUES
+	(1, 'Nome do Admin', 'Sobrenome do Admin', 'Admin User', 'admin', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste@teste.com', 1, NULL, 'ab2e5e107072122aebd314c853bca6529302ffe647a8a24843fe21f8794b346d', '2026-09-04 22:50:37', '2024-04-27 12:00:00', '2024-05-07 23:53:06'),
+	(2, 'Teste Nome', 'Teste Sobrenome', 'Nome Teste', 'teste', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste2@teste.com', 1, NULL, '34d10485ba7d84fdacc60b5cf031912fc2b97cac91eb9c603443316563662186', '0000-00-00 00:00:00', '2024-04-27 12:01:00', '0000-00-00 00:00:00'),
+	(3, 'pablo tetsuo', 'sato', 'Pablo Sato', 'pablo', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'pablosato@ymail.com', 1, NULL, '711adf5148a1e4b5b5fa81d36050cd4fd601a7c02a414daa81f52ce34f1a0ac4', '2026-09-05 05:21:37', '2024-04-27 12:02:00', '2026-09-04 05:21:37');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

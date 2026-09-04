@@ -1,17 +1,17 @@
 <?php
-// Inicia a sessão
-// Start the session
 session_start();
+require_once __DIR__ . '/../../lib/config.php';
+require_once __DIR__ . '/../class/Database.php';
 
+// Invalida o token no banco para que ele não possa ser reaproveitado.
+if (!empty($_SESSION['id_user'])) {
+    Database::get()
+        ->prepare("UPDATE users SET token = '', token_expiry = '1000-01-01 00:00:00' WHERE id = :id")
+        ->execute([':id' => $_SESSION['id_user']]);
+}
 
 session_unset();
-
-
-// Destrói completamente a sessão
-// Remove specific session variable
 session_destroy();
 
-// Redireciona para a página de login
-// Redirects to login page
-header("Location: ../");
+header('Location: ' . BASE_URL . '/backoffice/');
 exit;

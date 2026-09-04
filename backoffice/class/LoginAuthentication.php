@@ -34,9 +34,9 @@ class LoginAuthentication {
 
         try {
             $stmt = $pdo->prepare("
-                SELECT id, user, password, name, lastname, email 
-                FROM users 
-                WHERE email = :email
+                SELECT id, user, password, name, lastname, email
+                FROM users
+                WHERE email = :email AND ativo = 1
                 LIMIT 1
             ");
             $stmt->execute([':email' => $login]);
@@ -97,9 +97,9 @@ class LoginAuthentication {
 
         try {
             $stmt = $pdo->prepare("
-                SELECT id, token_expiry 
-                FROM users 
-                WHERE token = :token
+                SELECT id, token_expiry
+                FROM users
+                WHERE token = :token AND ativo = 1
                 LIMIT 1
             ");
             $stmt->execute([':token' => $token]);

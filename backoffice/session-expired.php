@@ -1,27 +1,27 @@
 <?php
-session_start(); 
-include('../lib/config.php');
-require_once('class/LoginAuthentication.php');
+session_start();
+require_once __DIR__ . '/../lib/config.php';
 
-if(!isset($_SESSION['token'])){
-    unset($_SESSION['login']);
-    session_destroy();
-    session_unset();
-    header('Location: index');
-    exit();
-}else{
-    unset($_SESSION['login']);
-    session_destroy();
-}
-
-if(isset($_GET['logoff'])){
-    unset($_SESSION['login']);
-    session_destroy();
-    session_unset();
-    header('Location: index');
-    exit();
-}
+session_unset();
+session_destroy();
 ?>
-<h1>Your session has expired, please log in again</h1>
-<br>
-<a href="?logoff">Go to login</a>
+<!DOCTYPE html>
+<html lang="pt-br">
+<?php
+$title = "Sessão expirada | Backoffice Blog Pablo Sato";
+include __DIR__ . '/assets/views/head.php';
+?>
+
+<body class="bo-body">
+    <div class="bo-login">
+        <div class="bo-login-card text-center">
+            <i class="bi bi-clock-history" style="font-size:2.5rem;color:#f0ad4e"></i>
+            <h1 class="h5 mt-3">Sua sessão expirou</h1>
+            <p class="text-muted">Por segurança, você foi desconectado. Faça login novamente para continuar.</p>
+            <a href="<?= BASE_URL ?>/backoffice/" class="btn btn-danger w-100">
+                <i class="bi bi-box-arrow-in-right"></i> Ir para o login
+            </a>
+        </div>
+    </div>
+</body>
+</html>
