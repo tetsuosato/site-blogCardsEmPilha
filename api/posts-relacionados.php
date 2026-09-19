@@ -80,7 +80,7 @@ try {
             'titulo'        => $row['titulo'],
             'slug'          => $row['slug'],
             'resumo'        => gerar_resumo($row['conteudo']),
-            'imagem'        => 'imagesposts/' . $row['imagem'],
+            'imagem'        => 'images/img-youtube/' . $row['imagem'],
             'autor'         => $row['autor'],
             'categoria'     => $row['categoria'],
             'categoriaSlug' => slugify($row['categoria']),

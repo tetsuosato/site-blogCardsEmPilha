@@ -77,7 +77,7 @@ try {
             'autor' => $row['autor'],
             'data' => $data_formatada,
             'resumo' => gerar_resumo($row['conteudo']),
-            'imagem' => 'imagesposts'.'/'.$row['imagem'],
+            'imagem' => 'images/img-youtube'.'/'.$row['imagem'],
             'slug' => $row['slug'],
             'tags' => isset($row['tags']) ? $row['tags'] : null, // opcional
         ];

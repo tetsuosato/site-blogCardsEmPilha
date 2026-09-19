@@ -54,7 +54,7 @@ try {
             $row['tags'] = [];
         }
 
-        $caminhoImagem = 'imagesposts/' . $row['imagem'];
+        $caminhoImagem = 'images/img-youtube/' . $row['imagem'];
 
         $dataOriginal = $row['data'];
         $dataFormatada = date('d/m/Y H:i', strtotime($dataOriginal));

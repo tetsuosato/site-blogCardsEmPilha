@@ -71,7 +71,7 @@ try {
         $post['tags'] = [];
     }
 
-    $caminhoImagem = 'imagesposts/' . $post['imagem'];
+    $caminhoImagem = 'images/img-youtube/' . $post['imagem'];
 
     $dataOriginal = $post['data'];
     $dataFormatada = date('d/m/Y H:i', strtotime($dataOriginal));
