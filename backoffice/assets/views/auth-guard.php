@@ -22,13 +22,33 @@ require_once __DIR__ . '/../../class/LoginAuthentication.php';
 
 $backofficeUrl = BASE_URL . '/backoffice';
 
+// Endpoints chamados por JavaScript definem $guardaJson = true antes de incluir
+// este arquivo: um redirecionamento devolveria HTML onde a tela espera JSON.
+$guardaJson = isset($guardaJson) && $guardaJson;
+
+/** Encerra a sessão e interrompe a requisição no formato que o chamador espera. */
+function guarda_encerrar($backofficeUrl, $emJson) {
+    session_unset();
+    session_destroy();
+
+    if ($emJson) {
+        http_response_code(401);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'ok'   => false,
+            'erro' => 'Sessão expirada. Entre novamente.',
+        ], JSON_UNESCAPED_UNICODE);
+    } else {
+        header('Location: ' . $backofficeUrl . '/session-expired');
+    }
+
+    exit;
+}
+
 // Sessão sequestrada: o IP ou o navegador mudaram no meio da sessão.
 if (isset($_SESSION['ip'], $_SESSION['ua'])) {
     if ($_SESSION['ip'] !== $_SERVER['REMOTE_ADDR'] || $_SESSION['ua'] !== $_SERVER['HTTP_USER_AGENT']) {
-        session_unset();
-        session_destroy();
-        header('Location: ' . $backofficeUrl . '/session-expired');
-        exit;
+        guarda_encerrar($backofficeUrl, $guardaJson);
     }
 } else {
     $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
@@ -36,10 +56,7 @@ if (isset($_SESSION['ip'], $_SESSION['ua'])) {
 }
 
 if (empty($_SESSION['token']) || !LoginAuthentication::validateToken($_SESSION['token'])) {
-    session_unset();
-    session_destroy();
-    header('Location: ' . $backofficeUrl . '/session-expired');
-    exit;
+    guarda_encerrar($backofficeUrl, $guardaJson);
 }
 
 if (empty($_SESSION['csrf'])) {

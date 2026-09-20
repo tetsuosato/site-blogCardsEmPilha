@@ -646,6 +646,9 @@
 
 .post-content img {
   max-width: 100%;
+  /* Sem height:auto a imagem encolhe na largura mas mantém a altura do
+     atributo height, saindo achatada ou esticada. */
+  height: auto;
   border-radius: 0.5rem;
   margin: 1rem 0;
 }

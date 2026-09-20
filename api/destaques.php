@@ -27,6 +27,7 @@ try {
                     LEFT JOIN users u ON u.id = p.autor
                     LEFT JOIN tipo t ON t.id = p.tipo
                     LEFT JOIN categoria c ON c.id = p.categoria
+                    WHERE p.`data` <= NOW()
                     ORDER BY destaques ASC, ordem ASC
     ";
     $stmt = $connection->prepare($sql);
@@ -44,6 +45,8 @@ try {
    //  echo '<pre>'; print_r($destaques); die();
 
 
+
+    $post = ['destaque1' => [], 'destaque2' => []];
 
     foreach ($destaques as $row) {
 

@@ -1,4 +1,9 @@
 <?php
+// Fuso do site. Sem isto o PHP usa o fuso do servidor, que raramente é o do
+// Brasil, e as datas gravadas ficam deslocadas em relação ao NOW() do banco —
+// um post publicado "agora" nasceria no futuro e não apareceria no site.
+date_default_timezone_set('America/Sao_Paulo');
+
 // Detecta se está local ou produção
 if ($_SERVER['HTTP_HOST'] === 'localhost') {
     define('BASE_URL', 'http://localhost/projetos/site-blogCardsEmPilha');  // Para links

@@ -4,11 +4,12 @@ $paginaAtual = isset($paginaAtual) ? $paginaAtual : '';
 $menu = BASE_URL . '/backoffice/main';
 
 $itens = [
-    ['slug' => 'home',     'url' => $menu . '/',                  'icone' => 'bi-speedometer2',   'texto' => 'Dashboard',        'obra' => false],
-    ['slug' => 'usuarios', 'url' => $menu . '/usuarios',          'icone' => 'bi-people-fill',    'texto' => 'Usuários',         'obra' => false],
-    ['slug' => 'grupos',   'url' => $menu . '/grupos',            'icone' => 'bi-shield-lock',    'texto' => 'Grupos e Permissões', 'obra' => true],
-    ['slug' => 'video',    'url' => $menu . '/postagem-video',    'icone' => 'bi-youtube',        'texto' => 'Postar Vídeo',     'obra' => true],
-    ['slug' => 'artigo',   'url' => $menu . '/postagem-artigo',   'icone' => 'bi-file-earmark-text', 'texto' => 'Postar Artigo', 'obra' => true],
+    ['slug' => 'home',      'url' => $menu . '/',                  'icone' => 'bi-speedometer2',   'texto' => 'Dashboard',        'obra' => false],
+    ['slug' => 'postagens', 'url' => $menu . '/postagens',         'icone' => 'bi-collection',     'texto' => 'Postagens',        'obra' => false],
+    ['slug' => 'video',     'url' => $menu . '/postagem-video',    'icone' => 'bi-youtube',        'texto' => 'Postar Vídeo',     'obra' => false],
+    ['slug' => 'artigo',    'url' => $menu . '/postagem-artigo',   'icone' => 'bi-file-earmark-text', 'texto' => 'Postar Artigo', 'obra' => true],
+    ['slug' => 'usuarios',  'url' => $menu . '/usuarios',          'icone' => 'bi-people-fill',    'texto' => 'Usuários',         'obra' => false],
+    ['slug' => 'grupos',    'url' => $menu . '/grupos',            'icone' => 'bi-shield-lock',    'texto' => 'Grupos e Permissões', 'obra' => true],
 ];
 ?>
 <nav id="sidebar" class="bo-sidebar">
