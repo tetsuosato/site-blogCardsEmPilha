@@ -145,8 +145,13 @@ class YouTube {
      * descartada aqui para não virar uma capa borrada.
      */
     private static function baixarCapa($id) {
+        // O servidor de imagens do YouTube guarda a capa em cache por 2 horas.
+        // Um parâmetro único força uma cópia nova: sem ele, atualizar a capa
+        // logo após trocá-la no YouTube baixaria a antiga outra vez.
+        $semCache = '?nocache=' . time();
+
         foreach (self::$versoesCapa as $versao) {
-            $bytes = self::baixar(self::urlCapa($id, $versao));
+            $bytes = self::baixar(self::urlCapa($id, $versao) . $semCache);
 
             if ($bytes === null) {
                 continue;
@@ -206,6 +211,7 @@ class YouTube {
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_TIMEOUT        => $segundos,
                 CURLOPT_USERAGENT      => 'Mozilla/5.0 (compatible; BackofficeVlogRock/1.0)',
+                CURLOPT_HTTPHEADER     => ['Cache-Control: no-cache', 'Pragma: no-cache'],
             ]);
 
             $corpo  = curl_exec($ch);

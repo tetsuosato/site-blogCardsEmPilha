@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../assets/views/auth-guard.php';
+require_once __DIR__ . '/../../api/functions/functions.php';
 
 $paginaAtual  = 'home';
 $tituloPagina = 'Dashboard';
@@ -165,7 +166,7 @@ include __DIR__ . '/../assets/views/dash-topo.php';
                     <?php $agendado = strtotime($post['data']) > time(); ?>
                     <tr>
                         <td>
-                            <img src="<?= BASE_URL ?>/images/img-youtube/<?= e($post['imagem']) ?>"
+                            <img src="<?= e(BASE_URL . '/' . caminhoCapa($post['imagem'])) ?>"
                                  alt="" class="bo-thumb" loading="lazy">
                         </td>
                         <td>

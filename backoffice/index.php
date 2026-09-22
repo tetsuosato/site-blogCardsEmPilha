@@ -1,17 +1,8 @@
 <?php
-$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
+require_once __DIR__ . '/class/Sessao.php';
+require_once __DIR__ . '/class/Captcha.php';
 
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path'     => '/',
-    'domain'   => '',
-    'secure'   => $isHttps,
-    'httponly' => true,
-    'samesite' => 'Strict'
-]);
-
-session_start();
+Sessao::iniciar();
 require_once __DIR__ . '/../lib/config.php';
 require_once __DIR__ . '/class/LoginAuthentication.php';
 
@@ -91,8 +82,10 @@ include __DIR__ . '/assets/views/head.php';
                 <div class="mb-3">
                     <label for="captcha" class="form-label">Digite o conteúdo da imagem</label>
                     <div class="d-flex gap-2 align-items-center">
-                        <img src="<?= BASE_URL ?>/backoffice/functions/captcha.php" alt="CAPTCHA" class="rounded border">
-                        <input type="text" class="form-control" id="captcha" name="captcha" required>
+                        <img src="<?= Captcha::gerar() ?>" alt="CAPTCHA" class="rounded border">
+                        <input type="text" class="form-control" id="captcha" name="captcha"
+                               autocomplete="off" autocapitalize="characters" maxlength="5"
+                               style="text-transform:uppercase" required>
                     </div>
                 </div>
 

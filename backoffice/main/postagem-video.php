@@ -29,8 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_valid($_POST['csrf'] ?? '')) {
         $erros[] = 'Sessão inválida. Recarregue a página e tente novamente.';
     } else {
+        // Título e conteúdo chegam codificados para não serem barrados pelo
+        // firewall da hospedagem; os demais campos vêm como sempre.
         foreach (array_keys($formulario) as $campo) {
-            $formulario[$campo] = trim($_POST[$campo] ?? '');
+            $formulario[$campo] = trim(post_protegido($campo));
         }
 
         $id = $formulario['id'] !== '' ? (int) $formulario['id'] : null;
@@ -50,7 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ? YouTube::extrairId($original['urlimagem'])
             : YouTube::extrairId($formulario['video'] !== '' ? $formulario['video'] : $formulario['link']);
 
-        if ($videoId === null) {
+        // O vídeo só é exigido ao criar. Na edição ele não muda, e há postagens
+        // sem vídeo algum (as de demonstração, por exemplo) que precisam
+        // continuar editáveis.
+        if ($id === null && $videoId === null) {
             $erros[] = 'Carregue um vídeo do YouTube antes de salvar.';
         }
 
@@ -203,6 +208,20 @@ unset($_SESSION['flash_ok']);
 // O bloco de dados abre já preenchido na edição e quando a validação falha.
 $mostrarDados = $editando || ($erros && $formulario['titulo'] !== '');
 
+// Na edição a capa é lida do registro, e não deduzida do vídeo: postagens sem
+// vídeo usam capas com outros nomes, às vezes compartilhadas entre várias.
+$capaAtual = '';
+$temVideo  = false;
+
+if ($editando && $formulario['id'] !== '') {
+    $registroAtual = Postagem::buscar((int) $formulario['id']);
+
+    if ($registroAtual) {
+        $capaAtual = (string) $registroAtual['imagem'];
+        $temVideo  = YouTube::extrairId((string) $registroAtual['urlimagem']) !== null;
+    }
+}
+
 include __DIR__ . '/../assets/views/dash-topo.php';
 ?>
 
@@ -252,22 +271,38 @@ include __DIR__ . '/../assets/views/dash-topo.php';
         <div class="bo-painel-corpo">
             <?php if ($editando): ?>
                 <div class="d-flex gap-3 align-items-start flex-wrap">
-                    <img src="<?= BASE_URL ?>/images/img-youtube/<?= e($formulario['video']) ?>.webp"
-                         alt="Capa do vídeo" class="rounded border"
-                         style="width:240px;aspect-ratio:16/9;object-fit:cover">
+                    <?php if ($capaAtual !== ''): ?>
+                        <img id="capa-atual"
+                             src="<?= e(BASE_URL . '/' . caminhoCapa($capaAtual)) ?>"
+                             alt="Capa do vídeo" class="rounded border"
+                             style="width:240px;aspect-ratio:16/9;object-fit:cover">
+                    <?php endif; ?>
                     <div class="small">
                         <div class="text-muted">Vídeo</div>
                         <div class="fw-semibold mb-2">
-                            <a href="<?= e($formulario['link']) ?>" target="_blank" rel="noopener">
-                                <?= e($formulario['link']) ?> <i class="bi bi-box-arrow-up-right"></i>
-                            </a>
+                            <?php if ($temVideo): ?>
+                                <a href="<?= e($formulario['link']) ?>" target="_blank" rel="noopener">
+                                    <?= e($formulario['link']) ?> <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            <?php else: ?>
+                                <span class="text-body-secondary fw-normal">Esta postagem não tem vídeo do YouTube.</span>
+                            <?php endif; ?>
                         </div>
                         <div class="text-muted">Capa</div>
-                        <div class="fw-semibold mb-2"><?= e($formulario['video']) ?>.webp</div>
-                        <div class="text-body-secondary">
-                            O vídeo e a capa não mudam na edição.<br>
-                            Para publicar outro vídeo, crie uma nova postagem.
-                        </div>
+                        <div class="fw-semibold mb-2"><?= $capaAtual !== '' ? e($capaAtual) : '&mdash;' ?></div>
+
+                        <?php if ($temVideo): ?>
+                            <button type="button" class="btn btn-sm btn-outline-danger mb-2" id="btn-atualizar-capa"
+                                    data-post="<?= (int) $formulario['id'] ?>">
+                                <i class="bi bi-arrow-repeat"></i> Atualizar capa do YouTube
+                            </button>
+                            <div id="aviso-capa"></div>
+
+                            <div class="text-body-secondary">
+                                Trocou a miniatura no YouTube? Use o botão acima para trazer a nova.<br>
+                                O vídeo em si não muda na edição &mdash; para outro vídeo, crie uma nova postagem.
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php else: ?>

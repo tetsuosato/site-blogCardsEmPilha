@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/Captcha.php';
+
 class LoginAuthentication {
 
     private static function connect() {
@@ -24,8 +26,8 @@ class LoginAuthentication {
             session_start();
         }
 
-        // CAPTCHA
-        if (!isset($_SESSION['captcha']) || $captcha !== $_SESSION['captcha']) {
+        // CAPTCHA — conferido antes da senha e descartado em seguida.
+        if (!Captcha::validar($captcha)) {
             return false;
         }
 

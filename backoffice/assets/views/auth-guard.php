@@ -2,19 +2,8 @@
 // Protege as páginas internas do backoffice.
 // Inclua no topo de qualquer arquivo em main/ antes de qualquer saída.
 
-$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
-
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path'     => '/',
-    'domain'   => '',
-    'secure'   => $isHttps,
-    'httponly' => true,
-    'samesite' => 'Strict'
-]);
-
-session_start();
+require_once __DIR__ . '/../../class/Sessao.php';
+Sessao::iniciar();
 
 require_once __DIR__ . '/../../../lib/config.php';
 require_once __DIR__ . '/../../class/Database.php';
@@ -73,4 +62,26 @@ function csrf_valid($token) {
 
 function e($valor) {
     return htmlspecialchars((string) $valor, ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Lê um campo do formulário, aceitando a versão codificada em base64.
+ *
+ * O firewall da hospedagem (ModSecurity) bloqueia envios que contenham HTML
+ * como <iframe> — e o conteúdo de todo post traz o player do YouTube. Os campos
+ * de texto livre chegam codificados como <campo>_b64, que o firewall não
+ * confunde com ataque. A proteção do backoffice continua sendo o login e o
+ * token CSRF, conferidos antes de qualquer gravação.
+ *
+ * Sem a versão codificada (JavaScript desligado, por exemplo), usa o campo comum.
+ */
+function post_protegido($campo) {
+    if (isset($_POST[$campo . '_b64'])) {
+        $texto = base64_decode((string) $_POST[$campo . '_b64'], true);
+
+        // Descarta o que não decodifica ou não é UTF-8 válido.
+        return ($texto !== false && mb_check_encoding($texto, 'UTF-8')) ? $texto : '';
+    }
+
+    return isset($_POST[$campo]) ? (string) $_POST[$campo] : '';
 }

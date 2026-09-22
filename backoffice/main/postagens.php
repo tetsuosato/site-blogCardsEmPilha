@@ -161,7 +161,7 @@ include __DIR__ . '/../assets/views/dash-topo.php';
                         <?php $agendado = strtotime($post['data']) > time(); ?>
                         <tr>
                             <td>
-                                <img src="<?= BASE_URL ?>/images/img-youtube/<?= e($post['imagem']) ?>"
+                                <img src="<?= e(BASE_URL . '/' . caminhoCapa($post['imagem'])) ?>"
                                      alt="" class="bo-thumb" loading="lazy">
                             </td>
                             <td>

@@ -14,6 +14,21 @@ function gerar_resumo(string $conteudo, int $max_completo = 160): string {
     return $parte . '...';
 }
 
+/**
+ * Caminho da capa do post com a data de modificação do arquivo como versão.
+ *
+ * O nome da capa é sempre o identificador do vídeo, então ao atualizá-la o
+ * endereço seria o mesmo e o navegador continuaria mostrando a antiga do
+ * cache. A versão muda só quando o arquivo muda: fora isso a imagem segue
+ * aproveitando o cache normalmente.
+ */
+function caminhoCapa($arquivo) {
+    $relativo = 'images/img-youtube/' . $arquivo;
+    $absoluto = dirname(__DIR__, 2) . '/' . $relativo;
+
+    return is_file($absoluto) ? $relativo . '?v=' . filemtime($absoluto) : $relativo;
+}
+
 function slugify($string) {
     // Converte para minúsculas
     $slug = mb_strtolower($string, 'UTF-8');

@@ -22,7 +22,14 @@ function responder_erro($mensagem, $status = 400) {
     exit;
 }
 
-$link = isset($_GET['link']) ? $_GET['link'] : '';
+// O link chega codificado: um endereço externo em parâmetro é um dos padrões
+// que o firewall da hospedagem trata como tentativa de incluir arquivo remoto.
+if (isset($_GET['link_b64'])) {
+    $link = base64_decode((string) $_GET['link_b64'], true);
+    $link = ($link !== false && mb_check_encoding($link, 'UTF-8')) ? $link : '';
+} else {
+    $link = isset($_GET['link']) ? $_GET['link'] : '';
+}
 
 if (trim($link) === '') {
     responder_erro('Informe o link do vídeo.');

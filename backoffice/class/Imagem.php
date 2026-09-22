@@ -50,7 +50,15 @@ class Imagem {
             mkdir(dirname($destino), 0775, true);
         }
 
-        $ok = imagewebp($destinoImg, $destino, $qualidade);
+        // Grava ao lado e só depois substitui: ao atualizar uma capa que já
+        // está no ar, uma gravação interrompida não deixa o site com um
+        // arquivo pela metade.
+        $temporario = $destino . '.tmp';
+        $ok = imagewebp($destinoImg, $temporario, $qualidade) && rename($temporario, $destino);
+
+        if (!$ok && is_file($temporario)) {
+            @unlink($temporario);
+        }
 
         imagedestroy($origem);
         imagedestroy($destinoImg);

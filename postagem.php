@@ -68,7 +68,7 @@ include('assets/views/head.php');
           <!-- Imagem de capa -->
           <a href="<?= htmlspecialchars($postagem['urlimagem']) ?>" target="_blank" class="post-hero-link">
             <img
-              src="<?= htmlspecialchars(BASE_URL . '/' . $postagem['imagem']) . '?t=' . time() ?>"
+              src="<?= htmlspecialchars(BASE_URL . '/' . $postagem['imagem']) ?>"
               alt="<?= htmlspecialchars($postagem['titulo']) ?>"
               class="post-hero-img"
             >

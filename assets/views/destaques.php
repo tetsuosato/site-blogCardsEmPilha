@@ -13,7 +13,7 @@
         <div class="col-md-4">
             <div class="card h-100 theme-card">
                 <div class="card-img-wrapper">
-                    <img src="<?= htmlspecialchars(BASE_URL . '/' . $post['imagem'] . '?t=' . mt_rand(1,1000)) ?>"
+                    <img src="<?= htmlspecialchars(BASE_URL . '/' . $post['imagem']) ?>"
                          class="card-img-top" alt="<?= htmlspecialchars($post['titulo']) ?>">
                     <span class="card-categoria-badge"><?= htmlspecialchars($post['categoria']) ?></span>
                     <h5 class="card-img-title"><?= htmlspecialchars($post['titulo']) ?></h5>

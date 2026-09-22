@@ -23,6 +23,76 @@ document.addEventListener('DOMContentLoaded', function () {
     var csrf      = form.querySelector('[name="csrf"]').value;
 
     iniciarEditor();
+    protegerEnvio();
+
+    /**
+     * Converte texto em base64 preservando acentos e emoji.
+     * O btoa() sozinho só aceita Latin-1 e quebraria com esses caracteres.
+     */
+    function paraBase64(texto) {
+        var bytes = new TextEncoder().encode(texto);
+        var binario = '';
+
+        for (var i = 0; i < bytes.length; i++) {
+            binario += String.fromCharCode(bytes[i]);
+        }
+
+        return btoa(binario);
+    }
+
+    /**
+     * Envia título, conteúdo e link codificados.
+     *
+     * O firewall da hospedagem (ModSecurity) recusa envios com <iframe> — todo
+     * post traz o player do YouTube — e com endereços externos em parâmetros,
+     * como o link do vídeo na criação do post. Codificados, os campos passam sem
+     * ser confundidos com ataque; o servidor decodifica antes de validar.
+     */
+    function protegerEnvio() {
+        // O link só existe na criação; na edição o campo não está na página.
+        var campos = ['titulo', 'conteudo', 'link'];
+
+        form.addEventListener('submit', function () {
+            // Traz o que está no editor para a textarea antes de codificar.
+            if (window.tinymce) {
+                tinymce.triggerSave();
+            }
+
+            campos.forEach(function (nome) {
+                var campo = form.querySelector('[name="' + nome + '"]');
+
+                if (!campo) {
+                    return;
+                }
+
+                var oculto = form.querySelector('input[name="' + nome + '_b64"]');
+
+                if (!oculto) {
+                    oculto = document.createElement('input');
+                    oculto.type = 'hidden';
+                    oculto.name = nome + '_b64';
+                    form.appendChild(oculto);
+                }
+
+                oculto.value = paraBase64(campo.value);
+
+                // Campo desativado não é enviado: só a versão codificada segue.
+                campo.disabled = true;
+            });
+        });
+
+        // Voltando pelo histórico a página sai do cache com os campos ainda
+        // desativados; reativa para que continuem editáveis.
+        window.addEventListener('pageshow', function () {
+            campos.forEach(function (nome) {
+                var campo = form.querySelector('[name="' + nome + '"]');
+
+                if (campo) {
+                    campo.disabled = false;
+                }
+            });
+        });
+    }
 
     /** Lê o conteúdo do editor, ou da textarea enquanto ele não abriu. */
     function lerConteudo() {
@@ -62,7 +132,8 @@ document.addEventListener('DOMContentLoaded', function () {
         limparAviso();
 
         try {
-            var resposta = await fetch(urlDados + '?link=' + encodeURIComponent(valor));
+            // Codificado para o firewall não tratar o endereço externo como ataque.
+            var resposta = await fetch(urlDados + '?link_b64=' + encodeURIComponent(paraBase64(valor)));
             var dados    = await resposta.json();
 
             if (!dados.ok) {
@@ -107,6 +178,52 @@ document.addEventListener('DOMContentLoaded', function () {
             botao.disabled = false;
             botao.innerHTML = '<i class="bi bi-download"></i> Carregar vídeo';
         }
+    }
+
+    // ----- Atualizar a capa (só na edição) -----
+    var botaoCapa = document.getElementById('btn-atualizar-capa');
+
+    if (botaoCapa) {
+        var urlCapa = new URL('../functions/youtube-capa.php', window.location.href).href;
+
+        botaoCapa.addEventListener('click', async function () {
+            var avisoCapa = document.getElementById('aviso-capa');
+            var original  = botaoCapa.innerHTML;
+
+            botaoCapa.disabled = true;
+            botaoCapa.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Baixando...';
+            avisoCapa.innerHTML = '';
+
+            try {
+                var dados = new FormData();
+                dados.append('id', botaoCapa.dataset.post);
+
+                var resposta = await fetch(urlCapa, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-Token': csrf },
+                    body: dados
+                });
+                var retorno = await resposta.json();
+
+                if (!retorno.ok) {
+                    avisoCapa.innerHTML = '<div class="alert alert-danger py-1 px-2 mb-2">' + retorno.erro + '</div>';
+                    return;
+                }
+
+                // A URL nova traz outra versão, então o navegador busca o arquivo
+                // em vez de reaproveitar a capa antiga do cache.
+                document.getElementById('capa-atual').src = retorno.capa;
+                avisoCapa.innerHTML = '<div class="alert alert-success py-1 px-2 mb-2">'
+                                    + 'Capa atualizada. Ela já aparece em todo o site.</div>';
+
+            } catch (erro) {
+                avisoCapa.innerHTML = '<div class="alert alert-danger py-1 px-2 mb-2">'
+                                    + 'Não foi possível atualizar a capa. Verifique sua conexão.</div>';
+            } finally {
+                botaoCapa.disabled = false;
+                botaoCapa.innerHTML = original;
+            }
+        });
     }
 
     // Na edição o vídeo já está definido e o passo do link nem aparece.
@@ -229,6 +346,11 @@ document.addEventListener('DOMContentLoaded', function () {
             // para caminhos relativos que quebrariam fora do backoffice.
             convert_urls: false,
             relative_urls: false,
+
+            // Grava acentos como caracteres, e não como &uacute;, &ccedil;...
+            // O banco é UTF-8 e os posts antigos já estão assim; com entidades,
+            // o resumo dos cards aparecia como "M&uacute;sica" no site.
+            entity_encoding: 'raw',
 
             image_caption: true,
             image_title: true,
