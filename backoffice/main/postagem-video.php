@@ -102,11 +102,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
             }
 
-            if ($id === null) {
+            // Capa: a imagem enviada tem prioridade sobre a miniatura do YouTube.
+            // Sem envio, só a criação precisa buscar uma capa — na edição a atual
+            // continua valendo.
+            $arquivoCapa = null;
+            $enviouCapa  = isset($_FILES['capa']) && $_FILES['capa']['error'] !== UPLOAD_ERR_NO_FILE;
+
+            if ($enviouCapa) {
+                $envio = Imagem::lerEnvio($_FILES['capa']);
+
+                if ($envio['erro'] !== null) {
+                    $erros[] = $envio['erro'];
+                } else {
+                    // Postagem sem vídeo não tem identificador para nomear o
+                    // arquivo, e a capa atual pode ser usada por outras postagens:
+                    // nesses casos gera um nome novo em vez de sobrescrever.
+                    $nomeCapa = $videoId !== null ? null : Imagem::nomeArquivo('capa');
+                    $arquivoCapa = YouTube::gravarCapa($videoId, $envio['bytes'], null, $nomeCapa);
+
+                    if ($arquivoCapa === null) {
+                        $erros[] = 'Não foi possível converter a capa enviada.';
+                    }
+                }
+            } elseif ($id === null) {
                 $arquivoCapa = YouTube::salvarCapa($videoId);
 
                 if ($arquivoCapa === null) {
-                    $erros[] = 'Não foi possível baixar a capa do vídeo. Tente novamente.';
+                    $erros[] = 'Não foi possível obter a capa no YouTube — o vídeo pode estar privado. '
+                             . 'Envie uma imagem no campo "Enviar capa" para usar como capa da postagem.';
                 }
             }
 
@@ -143,9 +166,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'categoria' => (int) $formulario['categoria'],
                     'conteudo'  => $formulario['conteudo'],
                     'tags'      => $tags,
+                    'imagem'    => $arquivoCapa,   // null mantém a capa atual
                 ]);
 
                 $acao = 'Postagem atualizada.';
+
+                if ($arquivoCapa !== null) {
+                    $acao .= ' Capa substituída.';
+                }
 
                 if ($novoSlug !== null && $novoSlug !== $original['slug']) {
                     $acao .= ' O link passou a ser /' . $novoSlug . '.';
@@ -253,7 +281,7 @@ include __DIR__ . '/../assets/views/dash-topo.php';
     </div>
 <?php endif; ?>
 
-<form method="post" id="form-video">
+<form method="post" id="form-video" enctype="multipart/form-data">
     <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
     <input type="hidden" name="id" value="<?= e($formulario['id']) ?>">
     <input type="hidden" name="video" id="video" value="<?= e($formulario['video']) ?>">
@@ -305,6 +333,19 @@ include __DIR__ . '/../assets/views/dash-topo.php';
                         <?php endif; ?>
                     </div>
                 </div>
+
+                <div class="mt-3" style="max-width:34rem">
+                    <label for="capa" class="form-label">Trocar a capa</label>
+                    <input type="file" class="form-control" id="capa" name="capa" accept="image/*">
+                    <div class="form-text" id="capa-ajuda">
+                        <?php if ($temVideo): ?>
+                            Envie uma imagem para usar no lugar da capa atual. Serve para os vídeos
+                            que o YouTube não devolve, em que o botão acima não funciona.
+                        <?php else: ?>
+                            Esta postagem não tem vídeo, então a capa só pode vir de um envio.
+                        <?php endif; ?>
+                    </div>
+                </div>
             <?php else: ?>
                 <label for="link" class="form-label">Link do vídeo</label>
                 <div class="input-group">
@@ -330,6 +371,14 @@ include __DIR__ . '/../assets/views/dash-topo.php';
                             <div id="previa-id" class="fw-semibold mb-2"></div>
                             <div class="text-muted">Capa que será salva</div>
                             <div class="fw-semibold"><span id="previa-arquivo"></span> &middot; 480&times;270</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3" style="max-width:34rem">
+                        <label for="capa" class="form-label">Enviar capa</label>
+                        <input type="file" class="form-control" id="capa" name="capa" accept="image/*">
+                        <div class="form-text" id="capa-ajuda">
+                            Opcional: só envie se quiser usar uma arte própria no lugar da miniatura do YouTube.
                         </div>
                     </div>
                 </div>

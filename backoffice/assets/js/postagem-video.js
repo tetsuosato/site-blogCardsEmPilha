@@ -145,22 +145,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Só preenche título e conteúdo se ainda estiverem vazios, para não
             // descartar o que já foi escrito ao recarregar outro link.
-            if (campoTitulo.value.trim() === '') {
+            // Vídeo não encontrado vem sem título: aí o campo fica para digitar.
+            if (dados.titulo && campoTitulo.value.trim() === '') {
                 campoTitulo.value = dados.titulo;
             }
             if (lerConteudo().trim() === '') {
                 escreverConteudo(dados.conteudo);
             }
 
-            document.getElementById('previa-capa').src      = dados.capa;
-            document.getElementById('previa-canal').textContent = dados.autor;
+            var imagemPrevia = document.getElementById('previa-capa');
+
+            if (dados.capa) {
+                imagemPrevia.src = dados.capa;
+                imagemPrevia.classList.remove('d-none');
+            } else {
+                imagemPrevia.removeAttribute('src');
+                imagemPrevia.classList.add('d-none');
+            }
+
+            // Sem capa no YouTube, o envio passa a ser obrigatório.
+            exigirCapa(!dados.capa);
+
+            document.getElementById('previa-canal').textContent = dados.autor || '—';
             document.getElementById('previa-id').textContent    = dados.id;
             document.getElementById('previa-arquivo').textContent = dados.id + '.webp';
 
             previa.classList.remove('d-none');
             blocoDados.classList.remove('d-none');
 
-            if (dados.jaCadastrado) {
+            if (!dados.encontrado) {
+                mostrarAviso(
+                    'O YouTube não devolveu os dados deste vídeo — ele pode estar privado, restrito ou removido. '
+                    + 'O player já foi montado no conteúdo. '
+                    + (dados.capa
+                        ? 'Informe o título para seguir; a capa foi encontrada.'
+                        : 'Informe o título e envie uma capa para seguir.'),
+                    'warning'
+                );
+            } else if (dados.jaCadastrado) {
                 mostrarAviso(
                     'Atenção: este vídeo já tem a postagem <strong>#' + dados.jaCadastrado.id + '</strong> — ' +
                     dados.jaCadastrado.titulo + '. Salvar de novo vai gerar um aviso.',
@@ -180,7 +202,45 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // ----- Atualizar a capa (só na edição) -----
+    // ----- Capa enviada à mão -----
+    var campoCapa = document.getElementById('capa');
+
+    /** Marca o envio da capa como obrigatório e ajusta o texto de ajuda. */
+    function exigirCapa(obrigatoria) {
+        var ajuda = document.getElementById('capa-ajuda');
+
+        if (!campoCapa || !ajuda) {
+            return;
+        }
+
+        campoCapa.required = obrigatoria;
+        ajuda.className = obrigatoria ? 'form-text text-danger' : 'form-text';
+        ajuda.textContent = obrigatoria
+            ? 'Obrigatório: a capa deste vídeo não está disponível no YouTube. '
+              + 'Envie uma imagem — ela será convertida para 480×270.'
+            : 'Opcional: só envie se quiser usar uma arte própria no lugar da miniatura do YouTube.';
+    }
+
+    if (campoCapa) {
+        campoCapa.addEventListener('change', function () {
+            var arquivo = campoCapa.files && campoCapa.files[0];
+
+            if (!arquivo) {
+                return;
+            }
+
+            // Mostra a imagem escolhida no lugar da capa, antes mesmo de salvar.
+            var imagem = document.getElementById('previa-capa')
+                      || document.getElementById('capa-atual');
+
+            if (imagem) {
+                imagem.src = URL.createObjectURL(arquivo);
+                imagem.classList.remove('d-none');
+            }
+        });
+    }
+
+    // ----- Atualizar a capa pelo YouTube (só na edição) -----
     var botaoCapa = document.getElementById('btn-atualizar-capa');
 
     if (botaoCapa) {

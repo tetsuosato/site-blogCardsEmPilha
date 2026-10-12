@@ -41,11 +41,13 @@ if ($id === null) {
     responder_erro('Link inválido. Cole o endereço do vídeo no YouTube.');
 }
 
+// Vídeo privado, restrito ou removido não devolve dados — mas o identificador
+// do link continua válido, então o cadastro pode seguir com o título digitado
+// e a capa enviada à mão.
 $dados = YouTube::buscarDados($id);
 
-if ($dados === null) {
-    responder_erro('Vídeo não encontrado. Verifique se o link está correto e se o vídeo é público.');
-}
+// A capa é consultada à parte: às vezes continua publicada mesmo sem os dados.
+$capa = YouTube::urlCapaDisponivel($id);
 
 // Avisa quando o vídeo já tem post, para não duplicar sem perceber.
 $consulta = Database::get()->prepare("
@@ -62,11 +64,12 @@ $jaCadastrado = $consulta->fetch();
 
 echo json_encode([
     'ok'           => true,
+    'encontrado'   => $dados !== null,
     'id'           => $id,
-    'titulo'       => $dados['titulo'],
-    'autor'        => $dados['autor'],
+    'titulo'       => $dados !== null ? $dados['titulo'] : '',
+    'autor'        => $dados !== null ? $dados['autor'] : '',
     'urlCurta'     => YouTube::urlCurta($id),
-    'capa'         => YouTube::urlCapa($id),
+    'capa'         => $capa,
     'conteudo'     => YouTube::htmlIncorporado($id),
     'jaCadastrado' => $jaCadastrado ? [
         'id'     => (int) $jaCadastrado['id'],

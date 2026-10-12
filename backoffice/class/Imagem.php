@@ -12,6 +12,58 @@ class Imagem {
     /** Formatos aceitos na entrada (a saída é sempre WebP). */
     const TIPOS_ACEITOS = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp'];
 
+    /** Maior arquivo aceito na entrada, antes da conversão. */
+    const TAMANHO_MAXIMO = 15 * 1024 * 1024;
+
+    /**
+     * Confere um arquivo recebido pelo formulário e devolve o conteúdo dele.
+     *
+     * O tipo é lido do conteúdo, não do nome nem do que o navegador declara.
+     * Usado tanto pelas imagens do editor quanto pela capa enviada à mão.
+     *
+     * @param  array $arquivo item de $_FILES
+     * @return array ['bytes' => string|null, 'erro' => string|null]
+     */
+    public static function lerEnvio($arquivo) {
+        $falha = function ($mensagem) {
+            return ['bytes' => null, 'erro' => $mensagem];
+        };
+
+        if (!is_array($arquivo) || !isset($arquivo['error'])) {
+            return $falha('Nenhum arquivo recebido.');
+        }
+
+        if ($arquivo['error'] !== UPLOAD_ERR_OK) {
+            // Os dois primeiros casos são o limite do próprio PHP, não do formulário.
+            $motivos = [
+                UPLOAD_ERR_INI_SIZE  => 'O arquivo excede o limite do servidor.',
+                UPLOAD_ERR_FORM_SIZE => 'O arquivo excede o limite permitido.',
+                UPLOAD_ERR_PARTIAL   => 'O envio foi interrompido. Tente novamente.',
+                UPLOAD_ERR_NO_FILE   => 'Nenhum arquivo recebido.',
+            ];
+
+            return $falha($motivos[$arquivo['error']] ?? 'Falha no envio do arquivo.');
+        }
+
+        if ($arquivo['size'] > self::TAMANHO_MAXIMO) {
+            return $falha('A imagem deve ter no máximo 15 MB.');
+        }
+
+        $informacoes = @getimagesize($arquivo['tmp_name']);
+
+        if ($informacoes === false || !in_array($informacoes['mime'], self::TIPOS_ACEITOS, true)) {
+            return $falha('Envie uma imagem em JPG, PNG, GIF, BMP ou WebP.');
+        }
+
+        $bytes = @file_get_contents($arquivo['tmp_name']);
+
+        if ($bytes === false) {
+            return $falha('Não foi possível ler o arquivo enviado.');
+        }
+
+        return ['bytes' => $bytes, 'erro' => null];
+    }
+
     /**
      * Grava os bytes recebidos como WebP nas dimensões exatas pedidas.
      *

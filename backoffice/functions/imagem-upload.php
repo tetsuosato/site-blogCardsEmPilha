@@ -12,9 +12,6 @@ require_once __DIR__ . '/../class/Imagem.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-/** Maior arquivo aceito na entrada, antes da conversão. */
-const TAMANHO_MAXIMO = 15 * 1024 * 1024;
-
 function falhar($mensagem, $status = 400) {
     http_response_code($status);
     echo json_encode(['error' => $mensagem], JSON_UNESCAPED_UNICODE);
@@ -35,36 +32,14 @@ if (!isset($_FILES['file'])) {
 }
 
 $arquivo = $_FILES['file'];
+$envio   = Imagem::lerEnvio($arquivo);
 
-if ($arquivo['error'] !== UPLOAD_ERR_OK) {
-    // Os dois primeiros casos são o limite do próprio PHP, não do formulário.
-    $motivos = [
-        UPLOAD_ERR_INI_SIZE   => 'O arquivo excede o limite do servidor.',
-        UPLOAD_ERR_FORM_SIZE  => 'O arquivo excede o limite permitido.',
-        UPLOAD_ERR_PARTIAL    => 'O envio foi interrompido. Tente novamente.',
-        UPLOAD_ERR_NO_FILE    => 'Nenhum arquivo recebido.',
-    ];
-    falhar($motivos[$arquivo['error']] ?? 'Falha no envio do arquivo.');
+if ($envio['erro'] !== null) {
+    falhar($envio['erro']);
 }
 
-if ($arquivo['size'] > TAMANHO_MAXIMO) {
-    falhar('A imagem deve ter no máximo 15 MB.');
-}
-
-// O tipo é lido do conteúdo, não do nome nem do que o navegador declara.
-$informacoes = @getimagesize($arquivo['tmp_name']);
-
-if ($informacoes === false || !in_array($informacoes['mime'], Imagem::TIPOS_ACEITOS, true)) {
-    falhar('Envie uma imagem em JPG, PNG, GIF, BMP ou WebP.');
-}
-
-$bytes = file_get_contents($arquivo['tmp_name']);
-
-if ($bytes === false) {
-    falhar('Não foi possível ler o arquivo enviado.');
-}
-
-$nome    = Imagem::nomeArquivo($arquivo['name']);
+$bytes = $envio['bytes'];
+$nome  = Imagem::nomeArquivo($arquivo['name']);
 $destino = Imagem::pastaPosts() . '/' . $nome;
 
 $resultado = Imagem::converterParaWebp($bytes, $destino);

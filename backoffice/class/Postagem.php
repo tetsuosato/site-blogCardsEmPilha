@@ -189,6 +189,12 @@ class Postagem {
             $params[':slug'] = $dados['slug'];
         }
 
+        // Sem capa nova, a atual continua valendo.
+        if (!empty($dados['imagem'])) {
+            $sql .= ", imagem = :imagem";
+            $params[':imagem'] = $dados['imagem'];
+        }
+
         $sql .= " WHERE id = :id";
 
         Database::get()->prepare($sql)->execute($params);

@@ -118,14 +118,24 @@ class YouTube {
      * @return string|null nome do arquivo gravado
      */
     public static function salvarCapa($id, $pasta = null) {
-        $bytes = self::baixarCapa($id);
+        $capa = self::melhorCapa($id);
 
-        if ($bytes === null) {
-            return null;
-        }
+        return $capa === null ? null : self::gravarCapa($id, $capa['bytes'], $pasta);
+    }
 
+    /**
+     * Grava uma imagem qualquer como capa do vídeo.
+     *
+     * Usada quando o vídeo não está acessível no YouTube e a capa é enviada à
+     * mão: o tratamento é o mesmo da capa baixada — 480x270, WebP e o nome
+     * formado pelo identificador do vídeo.
+     *
+     * @param  string      $nomeArquivo  nome a usar; por padrão, {id}.webp
+     * @return string|null nome do arquivo gravado
+     */
+    public static function gravarCapa($id, $bytes, $pasta = null, $nomeArquivo = null) {
         $pasta   = $pasta === null ? self::pastaCapas() : rtrim($pasta, "/\\");
-        $arquivo = $id . '.webp';
+        $arquivo = $nomeArquivo === null ? $id . '.webp' : $nomeArquivo;
 
         $ok = Imagem::redimensionarParaWebp(
             $bytes,
@@ -138,20 +148,47 @@ class YouTube {
     }
 
     /**
+     * Endereço da capa que realmente existe, para a pré-visualização.
+     *
+     * Vídeos sem maxresdefault cairiam numa imagem quebrada se a tela apontasse
+     * direto para essa versão. Devolve null quando nenhuma versão serve — é o
+     * sinal de que a capa terá de ser enviada à mão.
+     *
+     * @return string|null
+     */
+    public static function urlCapaDisponivel($id) {
+        $capa = self::melhorCapa($id);
+
+        return $capa === null ? null : $capa['url'];
+    }
+
+    /**
      * Busca a melhor capa disponível.
      *
      * Vídeos antigos ou pouco acessados nem sempre têm maxresdefault; nesses
      * casos o YouTube responde com uma imagem substituta de 120x90, que é
      * descartada aqui para não virar uma capa borrada.
+     *
+     * @return array|null ['url' => string, 'bytes' => string]
      */
-    private static function baixarCapa($id) {
+    private static function melhorCapa($id) {
         // O servidor de imagens do YouTube guarda a capa em cache por 2 horas.
         // Um parâmetro único força uma cópia nova: sem ele, atualizar a capa
         // logo após trocá-la no YouTube baixaria a antiga outra vez.
         $semCache = '?nocache=' . time();
 
+        $enderecos = [];
         foreach (self::$versoesCapa as $versao) {
-            $bytes = self::baixar(self::urlCapa($id, $versao) . $semCache);
+            $enderecos[$versao] = self::urlCapa($id, $versao);
+        }
+
+        // As versões são buscadas de uma vez só. Em sequência, um vídeo sem capa
+        // disponível gastava vários segundos tentando uma de cada vez.
+        $respostas = self::baixarVarias($enderecos, $semCache);
+
+        // A ordem de preferência continua sendo a da lista de versões.
+        foreach (self::$versoesCapa as $versao) {
+            $bytes = isset($respostas[$versao]) ? $respostas[$versao] : null;
 
             if ($bytes === null) {
                 continue;
@@ -163,10 +200,68 @@ class YouTube {
                 continue;
             }
 
-            return $bytes;
+            return ['url' => $enderecos[$versao], 'bytes' => $bytes];
         }
 
         return null;
+    }
+
+    /**
+     * Baixa vários endereços em paralelo.
+     *
+     * Sem cURL, cai para o modo sequencial — mais lento, mas funcional.
+     *
+     * @param  array  $enderecos chave => url
+     * @param  string $sufixo    acrescentado a cada url (o parâmetro anti-cache)
+     * @return array  chave => bytes, ou null quando a resposta não serve
+     */
+    private static function baixarVarias(array $enderecos, $sufixo = '') {
+        if (!function_exists('curl_multi_init')) {
+            $saida = [];
+
+            foreach ($enderecos as $chave => $url) {
+                $saida[$chave] = self::baixar($url . $sufixo);
+            }
+
+            return $saida;
+        }
+
+        $multi    = curl_multi_init();
+        $conexoes = [];
+
+        foreach ($enderecos as $chave => $url) {
+            $ch = curl_init($url . $sufixo);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_TIMEOUT        => 10,
+                CURLOPT_USERAGENT      => 'Mozilla/5.0 (compatible; BackofficeVlogRock/1.0)',
+                CURLOPT_HTTPHEADER     => ['Cache-Control: no-cache', 'Pragma: no-cache'],
+            ]);
+            curl_multi_add_handle($multi, $ch);
+            $conexoes[$chave] = $ch;
+        }
+
+        do {
+            curl_multi_exec($multi, $ativos);
+            curl_multi_select($multi, 0.1);
+        } while ($ativos > 0);
+
+        $saida = [];
+
+        foreach ($conexoes as $chave => $ch) {
+            $corpo  = curl_multi_getcontent($ch);
+            $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            $saida[$chave] = ($corpo !== false && $corpo !== '' && $status === 200) ? $corpo : null;
+
+            curl_multi_remove_handle($multi, $ch);
+            curl_close($ch);
+        }
+
+        curl_multi_close($multi);
+
+        return $saida;
     }
 
     /**
