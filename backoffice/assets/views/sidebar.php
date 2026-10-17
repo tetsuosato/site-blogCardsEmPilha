@@ -8,6 +8,8 @@ $itens = [
     ['slug' => 'postagens', 'url' => $menu . '/postagens',         'icone' => 'bi-collection',     'texto' => 'Postagens',        'obra' => false],
     ['slug' => 'video',     'url' => $menu . '/postagem-video',    'icone' => 'bi-youtube',        'texto' => 'Postar Vídeo',     'obra' => false],
     ['slug' => 'artigo',    'url' => $menu . '/postagem-artigo',   'icone' => 'bi-file-earmark-text', 'texto' => 'Postar Artigo', 'obra' => true],
+    ['slug' => 'tipos',      'url' => $menu . '/tipos',            'icone' => 'bi-tags-fill',      'texto' => 'Tipos',            'obra' => false],
+    ['slug' => 'categorias', 'url' => $menu . '/categorias',       'icone' => 'bi-bookmarks-fill', 'texto' => 'Categorias',       'obra' => false],
     ['slug' => 'usuarios',  'url' => $menu . '/usuarios',          'icone' => 'bi-people-fill',    'texto' => 'Usuários',         'obra' => false],
     ['slug' => 'grupos',    'url' => $menu . '/grupos',            'icone' => 'bi-shield-lock',    'texto' => 'Grupos e Permissões', 'obra' => true],
 ];

@@ -23,7 +23,7 @@ USE `pablotetsuosatoblog`;
 -- Copiando estrutura para tabela pablotetsuosatoblog.categoria
 DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE IF NOT EXISTS `categoria` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `Nome` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -132,7 +132,7 @@ INSERT INTO `posts` (`id`, `titulo`, `slug`, `autor`, `data`, `data_cadastro`, `
 -- Copiando estrutura para tabela pablotetsuosatoblog.tipo
 DROP TABLE IF EXISTS `tipo`;
 CREATE TABLE IF NOT EXISTS `tipo` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `Nome` varchar(50) NOT NULL DEFAULT '' COMMENT 'Nome do tipo',
   `Local` tinyint(4) NOT NULL DEFAULT 0 COMMENT 'Local do tipo 0: Post , 1: Vídeo',
   PRIMARY KEY (`id`) USING BTREE
@@ -166,9 +166,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Copiando dados para a tabela pablotetsuosatoblog.users: ~3 rows (aproximadamente)
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `name`, `lastname`, `nickname`, `user`, `password`, `email`, `ativo`, `id_grupo`, `token`, `token_expiry`, `data_creation`, `data_login`) VALUES
-	(1, 'Nome do Admin', 'Sobrenome do Admin', 'Admin User', 'admin', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste@teste.com', 1, NULL, '2429029a509090509f96eb2ade783c1b53c359ec61364c5a29744da14b38dc84', '2026-09-20 22:07:14', '2024-04-27 12:00:00', '2024-05-07 23:53:06'),
+	(1, 'Nome do Admin', 'Sobrenome do Admin', 'Admin User', 'admin', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste@teste.com', 1, NULL, '67e210a96ec596ae49d8371aa633bca8373dcd4e4f72aca47da1bafe3d16f240', '2026-10-18 16:51:36', '2024-04-27 12:00:00', '2024-05-07 23:53:06'),
 	(2, 'Teste Nome', 'Teste Sobrenome', 'Nome Teste', 'teste', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste2@teste.com', 1, NULL, '34d10485ba7d84fdacc60b5cf031912fc2b97cac91eb9c603443316563662186', '0000-00-00 00:00:00', '2024-04-27 12:01:00', '0000-00-00 00:00:00'),
-	(3, 'pablo tetsuo', 'sato', 'Pablo Sato', 'pablo', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'pablosato@ymail.com', 1, NULL, '711adf5148a1e4b5b5fa81d36050cd4fd601a7c02a414daa81f52ce34f1a0ac4', '2026-09-05 05:21:37', '2024-04-27 12:02:00', '2026-09-04 05:21:37');
+	(3, 'pablo tetsuo', 'sato', 'Pablo Sato', 'pablo', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'pablosato@ymail.com', 1, NULL, '3c6c6d37697937c4b00fed71ddb72a125ef1ca5d89151bdf53ada44cdf0f1f24', '2026-09-22 22:56:54', '2024-04-27 12:02:00', '2026-09-21 22:56:54');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
