@@ -35,13 +35,18 @@ function guarda_encerrar($backofficeUrl, $emJson) {
 }
 
 // Sessão sequestrada: o IP ou o navegador mudaram no meio da sessão.
+// Os cabeçalhos podem não vir; sem ?? '' o aviso sai impresso e atrapalha o
+// redirecionamento montado mais abaixo.
+$ipAtual = $_SERVER['REMOTE_ADDR'] ?? '';
+$uaAtual = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
 if (isset($_SESSION['ip'], $_SESSION['ua'])) {
-    if ($_SESSION['ip'] !== $_SERVER['REMOTE_ADDR'] || $_SESSION['ua'] !== $_SERVER['HTTP_USER_AGENT']) {
+    if ($_SESSION['ip'] !== $ipAtual || $_SESSION['ua'] !== $uaAtual) {
         guarda_encerrar($backofficeUrl, $guardaJson);
     }
 } else {
-    $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
-    $_SESSION['ua'] = $_SERVER['HTTP_USER_AGENT'];
+    $_SESSION['ip'] = $ipAtual;
+    $_SESSION['ua'] = $uaAtual;
 }
 
 if (empty($_SESSION['token']) || !LoginAuthentication::validateToken($_SESSION['token'])) {

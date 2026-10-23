@@ -111,10 +111,17 @@ class LoginAuthentication {
             if (!$user) return false;
 
             $now = time();
-            $expiryTime = strtotime($user['token_expiry']);
 
-            // token expirado
-            if ($expiryTime < $now) {
+            /*
+             * token_expiry pode estar vazio num registro antigo. Passar null
+             * para o strtotime gera um aviso de depreciação, e esse aviso é
+             * impresso antes do header('Location') de quem chamou — o
+             * redirecionamento falha e o login parece recusar a senha certa.
+             */
+            $expiryTime = strtotime((string) ($user['token_expiry'] ?? ''));
+
+            // token sem validade legível ou expirado
+            if ($expiryTime === false || $expiryTime < $now) {
                 return false;
             }
 

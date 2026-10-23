@@ -15,8 +15,10 @@ if (isset($_POST['acao'])) {
     $captcha  = $_POST['captcha'] ?? '';
 
     if (LoginAuthentication::authenticate($login, $password, $captcha)) {
-        $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
-        $_SESSION['ua'] = $_SERVER['HTTP_USER_AGENT'];
+        // Sem ?? '' um cabeçalho ausente vira aviso impresso na tela, e o
+        // header() logo abaixo deixa de funcionar.
+        $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'] ?? '';
+        $_SESSION['ua'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
         header('Location: ' . $painel);
         exit();
     }
