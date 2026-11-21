@@ -6,6 +6,17 @@ document.addEventListener('DOMContentLoaded', function () {
     let loading     = false;
     let hasMore     = true;
 
+    // Dado da API entra na página como texto, nunca como HTML: um título
+    // de vídeo contendo <img onerror=...> seria executado ao montar o card.
+    function escapeHtml(valor) {
+        return String(valor == null ? '' : valor)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
     function slugify(str) {
         return str.normalize('NFD').replace(/[̀-ͯ]/g, '')
             .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -23,18 +34,18 @@ document.addEventListener('DOMContentLoaded', function () {
         wrapper.innerHTML = `
             <div class="card h-100 theme-card">
                 <div class="card-img-wrapper">
-                    <img src="${BASE_URL}/${post.imagem}" alt="${post.titulo}" class="card-img-top">
-                    <span class="card-categoria-badge">${post.categoria}</span>
-                    <h5 class="card-img-title">${post.titulo}</h5>
+                    <img src="${BASE_URL}/${escapeHtml(post.imagem)}" alt="${escapeHtml(post.titulo)}" class="card-img-top">
+                    <span class="card-categoria-badge">${escapeHtml(post.categoria)}</span>
+                    <h5 class="card-img-title">${escapeHtml(post.titulo)}</h5>
                 </div>
                 <div class="card-body d-flex flex-column">
                     <p class="card-meta">
-                        <i class="bi bi-person-fill"></i> ${post.autor}
+                        <i class="bi bi-person-fill"></i> ${escapeHtml(post.autor)}
                         &nbsp;&middot;&nbsp;
                         <i class="bi bi-calendar3"></i> ${formatarData(post.data)}
                     </p>
-                    <p class="card-text flex-grow-1">${post.resumo}</p>
-                    <a href="${url}" class="card-read-more stretched-link mt-auto">Leia mais <i class="bi bi-arrow-right"></i></a>
+                    <p class="card-text flex-grow-1">${escapeHtml(post.resumo)}</p>
+                    <a href="${escapeHtml(url)}" class="card-read-more stretched-link mt-auto">Leia mais <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>`;
         return wrapper;

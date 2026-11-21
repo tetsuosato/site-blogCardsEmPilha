@@ -1,7 +1,15 @@
 <?php
 require_once __DIR__ . '/Captcha.php';
+require_once __DIR__ . '/LimiteLogin.php';
 
 class LoginAuthentication {
+
+    /**
+     * Fica true quando a última tentativa foi recusada pelo limite de
+     * tentativas, e não por dado errado — a tela usa isso para avisar que
+     * é preciso esperar, já que digitar de novo não adiantaria.
+     */
+    public static $bloqueado = false;
 
     private static function connect() {
         try {
@@ -26,13 +34,29 @@ class LoginAuthentication {
             session_start();
         }
 
-        // CAPTCHA — conferido antes da senha e descartado em seguida.
-        if (!Captcha::validar($captcha)) {
+        self::$bloqueado = false;
+
+        $pdo = self::connect();
+        if (!$pdo) {
+            unset($_SESSION['captcha']);
             return false;
         }
 
-        $pdo = self::connect();
-        if (!$pdo) return false;
+        // Origem que já errou demais nem chega a ter a senha conferida: do
+        // contrário um ataque continuaria descobrindo a senha certa, só que
+        // sem conseguir entrar.
+        if (LimiteLogin::bloqueado($pdo, $login)) {
+            unset($_SESSION['captcha']);
+            self::$bloqueado = true;
+            return false;
+        }
+
+        // CAPTCHA — conferido antes da senha e descartado em seguida.
+        // Errar o captcha também conta como tentativa.
+        if (!Captcha::validar($captcha)) {
+            LimiteLogin::registrarFalha($pdo, $login);
+            return false;
+        }
 
         try {
             $stmt = $pdo->prepare("
@@ -77,12 +101,16 @@ class LoginAuthentication {
                 $_SESSION['lastname'] = $user['lastname'];
                 $_SESSION['email'] = $user['email'];
 
+                LimiteLogin::limpar($pdo, $login);
+
                 return true;
             }
 
         } catch (Exception $e) {
             error_log($e->getMessage());
         }
+
+        LimiteLogin::registrarFalha($pdo, $login);
 
         return false;
     }

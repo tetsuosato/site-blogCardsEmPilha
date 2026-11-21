@@ -20,6 +20,8 @@ try {
     echo json_encode($stmt->fetchAll(), JSON_UNESCAPED_UNICODE);
 
 } catch (PDOException $e) {
+    // O detalhe fica só no log: na resposta ele revelaria usuário, banco e servidor.
+    error_log('API ' . basename(__FILE__) . ': ' . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['error' => $e->getMessage()]);
+    echo json_encode(['error' => 'Erro ao consultar o banco de dados']);
 }

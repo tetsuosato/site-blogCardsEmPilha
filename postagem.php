@@ -2,16 +2,35 @@
 require 'lib/config.php';
 header("Content-type: text/html; charset=UTF-8");
 
-// Parâmetros da URL
-$urlPath   = $_SERVER['QUERY_STRING'];
-$partes    = explode('/', trim($urlPath, '/'));
+// Parâmetros da URL (/postagem/categoria/slug/id)
+//
+// O .htaccess repassa "categoria/slug/id" e, depois de um &, os parâmetros
+// que vieram no link compartilhado (?fbclid=, ?utm_source=...). Só a parte
+// antes do & interessa aqui.
+$urlPath   = strtok($_SERVER['QUERY_STRING'] ?? '', '&');
+$partes    = explode('/', trim((string) $urlPath, '/'));
 $categoria = isset($partes[0]) ? $partes[0] : '';
 $slug      = isset($partes[1]) ? $partes[1] : '';
 $id        = isset($partes[2]) ? $partes[2] : '';
 
+// Cada parte só pode ter o que a regra do .htaccess aceita. Acessando
+// postagem.php direto dava para mandar qualquer texto, que ia parar no título
+// da página e dentro do endereço da chamada à API.
+$urlValida = preg_match('/^[a-zA-Z0-9_-]+$/', $categoria)
+          && preg_match('/^[a-zA-Z0-9_-]+$/', $slug)
+          && preg_match('/^[0-9]+$/', $id);
+
+if (!$urlValida) {
+    $categoria = $slug = $id = '';
+    http_response_code(404);
+}
+
 // Postagem
-$postagemURL  = BASE_URL . "/api/post-unico.php?categoria=$categoria&slug=$slug&id=$id";
-$postagemJson = @file_get_contents($postagemURL);
+$postagemURL  = BASE_URL . "/api/post-unico.php"
+    . "?categoria=" . urlencode($categoria)
+    . "&slug="      . urlencode($slug)
+    . "&id="        . urlencode($id);
+$postagemJson = $urlValida ? @file_get_contents($postagemURL) : false;
 $postagem     = $postagemJson ? json_decode($postagemJson, true) : "erro";
 
 // Relacionados
@@ -22,7 +41,7 @@ $relacionadosURL  = BASE_URL . "/api/posts-relacionados.php"
     . "?id="        . urlencode($id)
     . "&titulo="    . urlencode($tituloPost)
     . "&categoria=" . urlencode($categoriaPost);
-$relacionadosJson = @file_get_contents($relacionadosURL);
+$relacionadosJson = $urlValida ? @file_get_contents($relacionadosURL) : false;
 $relacionados     = $relacionadosJson ? json_decode($relacionadosJson, true) : [];
 ?>
 <!DOCTYPE html>

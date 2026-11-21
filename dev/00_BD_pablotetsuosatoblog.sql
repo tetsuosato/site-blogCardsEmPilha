@@ -170,6 +170,19 @@ INSERT INTO `users` (`id`, `name`, `lastname`, `nickname`, `user`, `password`, `
 	(2, 'Teste Nome', 'Teste Sobrenome', 'Nome Teste', 'teste', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'teste2@teste.com', 1, NULL, '34d10485ba7d84fdacc60b5cf031912fc2b97cac91eb9c603443316563662186', '0000-00-00 00:00:00', '2024-04-27 12:01:00', '0000-00-00 00:00:00'),
 	(3, 'pablo tetsuo', 'sato', 'Pablo Sato', 'pablo', '$2y$10$uHBDOh5fvDw70FxatDC.yuxBTQ194.1XD3cCzeJ8ZKd8saszzoXRG', 'pablosato@ymail.com', 1, NULL, '3c6c6d37697937c4b00fed71ddb72a125ef1ca5d89151bdf53ada44cdf0f1f24', '2026-09-22 22:56:54', '2024-04-27 12:02:00', '2026-09-21 22:56:54');
 
+-- Copiando estrutura para tabela pablotetsuosatoblog.login_tentativas
+-- (limite de tentativas de login do backoffice; ver backoffice/class/LimiteLogin.php)
+DROP TABLE IF EXISTS `login_tentativas`;
+CREATE TABLE IF NOT EXISTS `login_tentativas` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ip` varchar(45) NOT NULL,
+  `email` varchar(190) NOT NULL,
+  `data` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_ip_data` (`ip`,`data`),
+  KEY `idx_data` (`data`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

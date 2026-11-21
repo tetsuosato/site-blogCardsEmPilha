@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../api/functions/functions.php';
+require_once __DIR__ . '/../../lib/FiltroHtml.php';
 require_once __DIR__ . '/Imagem.php';
 require_once __DIR__ . '/YouTube.php';
 
@@ -178,7 +179,7 @@ class Postagem {
             ':data'      => $dados['data'],
             ':tipo'      => $dados['tipo'],
             ':categoria' => $dados['categoria'],
-            ':conteudo'  => $dados['conteudo'],
+            ':conteudo'  => FiltroHtml::limpar($dados['conteudo']),
             ':tags'      => json_encode($dados['tags'], JSON_UNESCAPED_UNICODE),
         ];
 
@@ -289,7 +290,7 @@ class Postagem {
             ':categoria' => $dados['categoria'],
             ':imagem'    => $dados['imagem'],
             ':urlimagem' => $dados['urlimagem'],
-            ':conteudo'  => $dados['conteudo'],
+            ':conteudo'  => FiltroHtml::limpar($dados['conteudo']),
             ':tags'      => json_encode($dados['tags'], JSON_UNESCAPED_UNICODE),
         ]);
 

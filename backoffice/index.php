@@ -8,6 +8,7 @@ require_once __DIR__ . '/class/LoginAuthentication.php';
 
 $painel = BASE_URL . '/backoffice/main/';
 $falhou = false;
+$bloqueado = false;
 
 if (isset($_POST['acao'])) {
     $login    = $_POST['login'] ?? '';
@@ -23,7 +24,8 @@ if (isset($_POST['acao'])) {
         exit();
     }
 
-    $falhou = true;
+    $falhou    = true;
+    $bloqueado = LoginAuthentication::$bloqueado;
 }
 
 if (isset($_SESSION['token'])) {
@@ -55,7 +57,12 @@ include __DIR__ . '/assets/views/head.php';
                 <p class="text-muted small mb-0">Blog Pablo Sato</p>
             </div>
 
-            <?php if ($falhou): ?>
+            <?php if ($bloqueado): ?>
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-hourglass-split"></i>
+                    Muitas tentativas sem sucesso. Aguarde <?= LimiteLogin::JANELA_MINUTOS ?> minutos e tente novamente.
+                </div>
+            <?php elseif ($falhou): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="bi bi-exclamation-triangle-fill"></i>
                     Dados inválidos. Verifique suas credenciais e tente novamente.

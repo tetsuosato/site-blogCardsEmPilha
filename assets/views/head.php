@@ -1,5 +1,5 @@
 <head>
-  <title><?= isset($title) ? $title : 'Blog Pablo Sato'; ?></title>
+  <title><?= htmlspecialchars(isset($title) ? $title : 'Blog Pablo Sato', ENT_QUOTES, 'UTF-8'); ?></title>
   <link rel="icon" href="<?= BASE_URL ?>/assets/image/favicon.png">
 
   <!-- Required meta tags -->

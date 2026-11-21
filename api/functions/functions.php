@@ -2,8 +2,11 @@
 
 // Função para gerar resumo do conteúdo
 function gerar_resumo(string $conteudo, int $max_completo = 160): string {
-    // Remove HTML e normaliza espaços
-    $texto_limpo = trim(preg_replace('/\s+/', ' ', strip_tags($conteudo)));
+    // Remove HTML, converte entidades (&eacute;, &nbsp;...) em texto e normaliza
+    // espaços. O resumo é exibido como texto puro — escapado no PHP e no
+    // JavaScript —, então uma entidade que sobrasse apareceria escrita na tela.
+    $texto = html_entity_decode(strip_tags($conteudo), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $texto_limpo = trim(preg_replace('/[\s\x{00A0}]+/u', ' ', $texto));
 
     if (mb_strlen($texto_limpo) <= $max_completo) {
         return $texto_limpo;

@@ -1,5 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // Dado da API entra na página como texto, nunca como HTML: um título
+    // de vídeo contendo <img onerror=...> seria executado ao montar o card.
+    function escapeHtml(valor) {
+        return String(valor == null ? '' : valor)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
     function slugify(str) {
         return str.normalize('NFD').replace(/[̀-ͯ]/g, '')
             .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -31,9 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     item.href      = url;
                     item.className = 'sidebar-post d-flex gap-2 align-items-start text-decoration-none';
                     item.innerHTML = `
-                        <img src="${BASE_URL}/${post.imagem}" alt="${post.titulo}" class="sidebar-post-img rounded">
+                        <img src="${BASE_URL}/${escapeHtml(post.imagem)}" alt="${escapeHtml(post.titulo)}" class="sidebar-post-img rounded">
                         <div>
-                            <p class="sidebar-post-title mb-0">${post.titulo}</p>
+                            <p class="sidebar-post-title mb-0">${escapeHtml(post.titulo)}</p>
                             <small class="text-muted">${formatarData(post.data)}</small>
                         </div>
                     `;

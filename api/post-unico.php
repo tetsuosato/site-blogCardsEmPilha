@@ -2,6 +2,7 @@
 header('Content-Type: application/json; charset=utf-8');
 include('../lib/config.php');
 include('functions/functions.php');
+require_once __DIR__ . '/../lib/FiltroHtml.php';
 
 mb_internal_encoding('UTF-8');
 
@@ -84,7 +85,8 @@ try {
         'categoria' => $post['categoria'],
         'imagem' => $caminhoImagem,
         'urlimagem' => isset($post['urlimagem']) ? $post['urlimagem'] : null,
-        'conteudo' => $post['conteudo'], // Se vier do usuário, sanitize no front-end
+        // Filtrado também na saída: cobre os posts gravados antes do filtro existir.
+        'conteudo' => FiltroHtml::limpar($post['conteudo']),
         'tags' => $post['tags'],
     ];
 
@@ -92,10 +94,11 @@ try {
     echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
 } catch (PDOException $e) {
+    // O detalhe fica só no log: na resposta ele revelaria usuário, banco e servidor.
+    error_log('API ' . basename(__FILE__) . ': ' . $e->getMessage());
     http_response_code(500);
     echo json_encode([
         'error' => 'Erro ao consultar o banco de dados',
-        'details' => $e->getMessage()
     ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     exit;
 }

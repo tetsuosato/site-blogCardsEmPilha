@@ -19,6 +19,41 @@ RewriteCond %{HTTP:Authorization} ^(.+)$
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 # ------------------------------
+# Cabeçalhos de segurança
+# Dentro de IfModule: sem o mod_headers o site continua no ar, só sem eles.
+# ------------------------------
+<IfModule mod_headers.c>
+    # Não deixa o navegador "adivinhar" o tipo de um arquivo
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Impede outro site de abrir as páginas dentro de um iframe (clickjacking)
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Ao sair para outro site, envia só o domínio, não o endereço completo
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Recursos do navegador que o site não usa ficam desligados
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+
+    # CSP mínima: sem plugins, sem trocar a base dos links e sem ser incorporado
+    # por outros sites. Scripts não são restringidos, para não afetar o TinyMCE,
+    # o player do YouTube e o BASE_URL escrito no HTML.
+    Header always set Content-Security-Policy "frame-ancestors 'self'; object-src 'none'; base-uri 'self'"
+</IfModule>
+
+# ------------------------------
+# Arquivos e pastas que não devem ser acessados pelo navegador
+# (.htaccess e cópias, logs, backups; pastas .git e .claude, se forem enviadas)
+# ------------------------------
+<FilesMatch "(^\.ht|\.(log|bak|old|ini|sh)$)">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_alias.c>
+    RedirectMatch 404 /\.(git|claude)(/|$)
+</IfModule>
+
+# ------------------------------
 # Força HTTPS e redireciona www → não-www
 # ------------------------------
 RewriteCond %{HTTPS} off [OR]

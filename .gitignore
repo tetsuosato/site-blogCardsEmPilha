@@ -5,5 +5,7 @@
 *.log
 
 # Ignorar a pasta de uploads
-/images/img-youtube/
-/images/img-post/
+/images/img-youtube/*
+!/images/img-youtube/.htaccess
+/images/img-post/*
+!/images/img-post/.htaccess

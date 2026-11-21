@@ -4,8 +4,15 @@
 // um post publicado "agora" nasceria no futuro e não apareceria no site.
 date_default_timezone_set('America/Sao_Paulo');
 
-// Detecta se está local ou produção
-if ($_SERVER['HTTP_HOST'] === 'localhost') {
+// Detecta se está local ou produção.
+//
+// A decisão vem do caminho da pasta no disco do servidor, que o visitante não
+// tem como alterar. Antes era o cabeçalho Host da requisição: qualquer pessoa
+// podia mandar "Host: localhost" ao site em produção e fazê-lo carregar a
+// configuração local.
+$ambienteLocal = stripos(str_replace('\\', '/', __DIR__), '/xampp/htdocs/') !== false;
+
+if ($ambienteLocal) {
     define('BASE_URL', 'http://localhost/projetos/site-blogCardsEmPilha');  // Para links
 
     // Constantes do sistema AMBIENTE DEV 
