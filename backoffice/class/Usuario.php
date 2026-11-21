@@ -75,14 +75,38 @@ class Usuario {
         ];
 
         // Senha em branco significa "manter a atual".
+        //
+        // Senha nova derruba a sessão que estiver aberta com a antiga: é para
+        // isso que se troca a senha quando se desconfia que ela vazou. Quem
+        // troca a própria senha recebe um token novo logo em seguida
+        // (renovarToken), então só a sessão dos outros lugares cai.
         if ($dados['password'] !== '') {
-            $sql .= ", password = :password";
+            $sql .= ", password = :password, token = '', token_expiry = '1000-01-01 00:00:00'";
             $params[':password'] = password_hash($dados['password'], PASSWORD_DEFAULT);
         }
 
         $sql .= " WHERE id = :id";
 
         Database::get()->prepare($sql)->execute($params);
+    }
+
+    /**
+     * Gera um token novo para o usuário e devolve o valor, para gravar na
+     * sessão de quem acabou de trocar a própria senha. Mesma validade de um
+     * login: 1 dia.
+     */
+    public static function renovarToken($id) {
+        $token = bin2hex(random_bytes(32));
+
+        Database::get()
+            ->prepare("UPDATE users SET token = :token, token_expiry = :expiry WHERE id = :id")
+            ->execute([
+                ':token'  => $token,
+                ':expiry' => date('Y-m-d H:i:s', strtotime('+1 day')),
+                ':id'     => $id,
+            ]);
+
+        return $token;
     }
 
     public static function excluir($id) {

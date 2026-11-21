@@ -87,6 +87,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     Usuario::atualizar($id, $dados);
                     $_SESSION['flash_ok'] = 'Usuário atualizado com sucesso.';
+
+                    if ($senha !== '') {
+                        if ($id === (int) $_SESSION['id_user']) {
+                            // A troca zerou o token desta sessão também; sem um
+                            // novo, a próxima página mandaria para "sessão expirada".
+                            session_regenerate_id(true);
+                            $_SESSION['token'] = Usuario::renovarToken($id);
+                            $_SESSION['flash_ok'] = 'Senha alterada. Sessões abertas em outros lugares foram encerradas.';
+                        } else {
+                            $_SESSION['flash_ok'] = 'Usuário atualizado. Se ele estava conectado, precisará entrar de novo com a senha nova.';
+                        }
+                    }
                 }
 
                 header('Location: ' . $urlPagina);

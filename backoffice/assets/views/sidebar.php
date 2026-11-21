@@ -39,13 +39,21 @@ $itens = [
             <i class="bi bi-box-arrow-up-right"></i>
             <span>Ver o site</span>
         </a>
-        <a href="<?= BASE_URL ?>/backoffice/functions/logout.php" class="bo-nav-link bo-nav-sair"
-           data-confirmar="Tem certeza que deseja sair do sistema?"
-           data-confirmar-titulo="Sair do sistema"
-           data-confirmar-ok="Sair">
-            <i class="bi bi-power"></i>
-            <span>Sair</span>
-        </a>
+        <?php
+        // Formulário único de saída, usado também pelo "Sair" do menu do
+        // usuário (topbar.php), que aponta para ele pelo atributo form.
+        // A confirmação em modal do dashboard.js age no envio do formulário.
+        ?>
+        <form id="bo-form-sair" method="post" action="<?= BASE_URL ?>/backoffice/functions/logout.php"
+              data-confirmar="Tem certeza que deseja sair do sistema?"
+              data-confirmar-titulo="Sair do sistema"
+              data-confirmar-ok="Sair">
+            <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+            <button type="submit" class="bo-nav-link bo-nav-sair">
+                <i class="bi bi-power"></i>
+                <span>Sair</span>
+            </button>
+        </form>
     </div>
 </nav>
 <div id="bo-overlay" class="bo-overlay"></div>

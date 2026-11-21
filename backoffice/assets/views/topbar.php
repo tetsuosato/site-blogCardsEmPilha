@@ -19,10 +19,8 @@ $nomeUsuario  = trim(($_SESSION['name'] ?? '') . ' ' . ($_SESSION['lastname'] ??
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="<?= BASE_URL ?>/backoffice/main/usuarios">Usuários</a></li>
             <li>
-                <a class="dropdown-item text-danger" href="<?= BASE_URL ?>/backoffice/functions/logout.php"
-                   data-confirmar="Tem certeza que deseja sair do sistema?"
-                   data-confirmar-titulo="Sair do sistema"
-                   data-confirmar-ok="Sair">Sair</a>
+                <!-- Envia o formulário de saída que fica no sidebar.php -->
+                <button type="submit" form="bo-form-sair" class="dropdown-item text-danger">Sair</button>
             </li>
         </ul>
     </div>

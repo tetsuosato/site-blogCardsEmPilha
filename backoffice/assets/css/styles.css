@@ -98,6 +98,19 @@ body.bo-body {
   transition: background-color .15s, color .15s;
 }
 
+/* "Sair" é um botão de formulário (logout por POST): tira a aparência de botão
+   para ficar igual aos links do menu. */
+button.bo-nav-link {
+  width: 100%;
+  background: none;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
 .bo-nav-link:hover {
   background: rgba(255, 255, 255, .06);
   color: #fff;
