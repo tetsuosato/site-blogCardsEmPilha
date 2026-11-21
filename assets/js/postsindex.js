@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnMais   = document.getElementById('btn-carregar-mais');
     let currentPage = 1;
     const perPage   = 10;
+    // As 3 mais recentes já aparecem em "Últimas Postagens", no topo da página.
+    const pular     = 3;
+    const secao     = document.getElementById('secao-mais-postagens');
     let loading     = false;
     let hasMore     = true;
 
@@ -58,11 +61,18 @@ document.addEventListener('DOMContentLoaded', function () {
         btnMais.textContent = 'Carregando...';
 
         try {
-            const resp = await fetch(BASE_URL + '/api/posts-index.php?page=' + currentPage + '&per_page=' + perPage);
+            const resp = await fetch(BASE_URL + '/api/posts-index.php?page=' + currentPage + '&per_page=' + perPage + '&pular=' + pular);
             if (!resp.ok) throw new Error('HTTP ' + resp.status);
             const data = await resp.json();
 
             if (!Array.isArray(data.posts)) return;
+
+            // Até 3 posts no site, todos já estão no topo: a seção não tem o que mostrar.
+            if (currentPage === 1 && data.posts.length === 0) {
+                if (secao) secao.hidden = true;
+                hasMore = false;
+                return;
+            }
 
             data.posts.forEach(function (post) {
                 container.appendChild(montarPostHTML(post));

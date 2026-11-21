@@ -757,3 +757,78 @@
 /* Capitalizar título */
 .titlepost { text-transform: capitalize; }
 .titlepost::first-letter { text-transform: uppercase; }
+
+/* ==========================================================================
+   Compartilhar (página de postagem) — assets/views/compartilhar.php
+   ========================================================================== */
+.post-compartilhar {
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 1.25rem;
+}
+.bg-dark .post-compartilhar {
+  border-top-color: rgba(255,255,255,0.08);
+}
+.post-compartilhar-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6c757d;
+  display: block;
+  margin-bottom: 0.65rem;
+}
+.bg-dark .post-compartilhar-label {
+  color: #adb5bd;
+}
+.post-compartilhar-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.post-compartilhar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  color: #fff;
+  background: #343a40;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.post-compartilhar-btn:hover,
+.post-compartilhar-btn:focus-visible {
+  color: #fff;
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+}
+.post-compartilhar-btn:focus-visible {
+  outline: 2px solid #ffc107;
+  outline-offset: 2px;
+}
+.post-compartilhar-whatsapp { background: #25d366; }
+.post-compartilhar-facebook { background: #1877f2; }
+.post-compartilhar-x        { background: #000; }
+.post-compartilhar-telegram { background: #229ed9; }
+.bg-dark .post-compartilhar-x,
+.bg-dark .post-compartilhar-copiar,
+.bg-dark .post-compartilhar-nativo {
+  background: #495057;
+}
+.post-compartilhar-aviso {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #198754;
+  margin-left: 0.25rem;
+}
+.bg-dark .post-compartilhar-aviso {
+  color: #75b798;
+}
+.post-compartilhar-aviso.is-erro { color: #dc3545; }
+.bg-dark .post-compartilhar-aviso.is-erro { color: #ea868f; }

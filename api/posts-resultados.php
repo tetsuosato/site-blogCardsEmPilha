@@ -81,7 +81,7 @@ try {
     if (count($whereClauses) > 0) {
         $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
     }
-    $sql .= " ORDER BY p.`data` DESC";
+    $sql .= " ORDER BY p.`data` DESC, p.id DESC"; // id desempata posts com a mesma data
     $offset = ($page - 1) * $per_page;
     $sql .= " LIMIT :limit OFFSET :offset";
 

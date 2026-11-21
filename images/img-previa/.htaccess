@@ -1,0 +1,11 @@
+# Pasta só de imagens: nada aqui dentro pode ser executado como script.
+# Os envios já são convertidos para WebP com nome gerado pelo sistema; esta é
+# uma segunda barreira caso algum arquivo chegue aqui por outro caminho.
+#
+# Pega também extensão dupla (foto.php.jpg), que alguns servidores executam.
+
+Options -Indexes -ExecCGI
+
+<FilesMatch "\.(php[0-9]?|phtml|phar|pht|phps|pl|py|cgi|sh|asp|aspx|jsp|shtml)(\.|$)">
+    Require all denied
+</FilesMatch>

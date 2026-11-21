@@ -13,11 +13,14 @@
             </div>
         </div>
 
+        <?php // Na home ($ocultarRecentes) as mais recentes já estão no topo da página. ?>
+        <?php if (empty($ocultarRecentes)): ?>
         <!-- Recentes -->
         <div class="sidebar-block theme-card">
             <p class="sidebar-title">Recentes</p>
             <div id="sidebar-recentes"></div>
         </div>
+        <?php endif; ?>
 
         <!-- Categorias -->
         <div class="sidebar-block theme-card">

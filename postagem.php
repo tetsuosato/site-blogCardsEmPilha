@@ -43,12 +43,45 @@ $relacionadosURL  = BASE_URL . "/api/posts-relacionados.php"
     . "&categoria=" . urlencode($categoriaPost);
 $relacionadosJson = $urlValida ? @file_get_contents($relacionadosURL) : false;
 $relacionados     = $relacionadosJson ? json_decode($relacionadosJson, true) : [];
+
+// Prévia do link e compartilhamento
+// Alimenta as metatags do head.php (o que aparece ao colar o link no WhatsApp,
+// Facebook...) e a barra "Compartilhar" (assets/views/compartilhar.php).
+require_once __DIR__ . '/api/functions/functions.php';
+
+$postEncontrado = is_array($postagem) && isset($postagem['titulo']);
+
+if ($postEncontrado) {
+    // Endereço oficial do post, com a categoria real — a da URL acessada pode
+    // ser qualquer texto, já que o post é localizado pelo slug e pelo id.
+    $urlPost = BASE_URL . '/postagem/' . slugify((string) $postagem['categoria']) . '/' . $slug . '/' . $id;
+
+    $ogTitulo    = $postagem['titulo'];
+    $ogDescricao = gerar_resumo((string) $postagem['conteudo']);
+    $ogUrl       = $urlPost;
+    $ogTipo      = 'article';
+
+    // Capa: o WebP do site vai em JPG (api/capa-previa), formato que todas as
+    // redes exibem. O ?v= muda quando a capa muda, e as redes buscam a imagem
+    // de novo em vez de reaproveitar a antiga que guardaram.
+    $capa        = parse_url((string) $postagem['imagem']);
+    $caminhoCapa = $capa['path'] ?? '';
+    parse_str($capa['query'] ?? '', $versaoCapa);
+
+    if (preg_match('~^images/((?:img-youtube|img-post)/[^/]+\.webp)$~', $caminhoCapa, $achado)) {
+        $ogImagem = BASE_URL . '/api/capa-previa?img=' . rawurlencode($achado[1])
+                  . (isset($versaoCapa['v']) ? '&v=' . (int) $versaoCapa['v'] : '');
+    } elseif (preg_match('~^images/[A-Za-z0-9/._-]+\.(jpe?g|png)$~i', $caminhoCapa)) {
+        $ogImagem = BASE_URL . '/' . $caminhoCapa;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <?php
-$title = "$slug - Blog Pablo Sato";
+// título da aba
+$title = $postEncontrado ? $postagem['titulo'] . ' - Blog Pablo Sato' : 'Postagem não encontrada - Blog Pablo Sato';
 include('assets/views/head.php');
 ?>
 
@@ -98,6 +131,9 @@ include('assets/views/head.php');
             <?= $postagem['conteudo'] ?>
           </article>
 
+          <!-- Compartilhar -->
+          <?php include __DIR__ . '/assets/views/compartilhar.php'; ?>
+
           <!-- Tags -->
           <?php if (!empty($postagem['tags']) && is_array($postagem['tags'])): ?>
             <section class="post-tags-section mb-5">
@@ -132,5 +168,9 @@ include('assets/views/head.php');
   <?php include __DIR__ . '/assets/views/relacionados.php'; ?>
 
   <?php include __DIR__ . '/assets/views/footer.php'; ?>
+
+  <?php if ($postEncontrado): ?>
+  <script src="<?= BASE_URL ?>/assets/js/compartilhar.js?v=<?=time()?>"></script>
+  <?php endif; ?>
 
 </body>

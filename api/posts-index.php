@@ -30,6 +30,13 @@ try {
         'options' => ['default' => 10, 'min_range' => 1, 'max_range' => 50]
     ]);
 
+    // Quantos dos posts mais recentes deixar de fora. A home mostra os 3
+    // primeiros em "Últimas Postagens" e pede a lista com pular=3, para ela
+    // continuar a partir do 4º. Sem o parâmetro, nada muda.
+    $pular = filter_input(INPUT_GET, 'pular', FILTER_VALIDATE_INT, [
+        'options' => ['default' => 0, 'min_range' => 0, 'max_range' => 50]
+    ]);
+
     // total para paginação
     $countSql = "SELECT COUNT(*) FROM posts p WHERE p.`data` <= NOW()";
     $countStmt = $connection->prepare($countSql);
@@ -53,8 +60,11 @@ try {
                 LEFT JOIN categoria c ON c.id = p.categoria
                 WHERE p.`data` <= NOW()
     ";
-    $sql .= " ORDER BY p.`data` DESC";
-    $offset = ($page - 1) * $per_page;
+    // O id desempata posts com a mesma data. Sem ele o banco pode devolver
+    // esses posts em ordem diferente a cada página, e um deles apareceria
+    // duas vezes enquanto outro nunca apareceria.
+    $sql .= " ORDER BY p.`data` DESC, p.id DESC";
+    $offset = $pular + ($page - 1) * $per_page;
     $sql .= " LIMIT :limit OFFSET :offset";
 
     $stmt = $connection->prepare($sql);

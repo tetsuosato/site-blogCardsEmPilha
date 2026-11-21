@@ -1,14 +1,26 @@
-<!-- DESTAQUES -->
+<?php
+/**
+ * ÚLTIMAS POSTAGENS — as 3 mais recentes, no topo da home.
+ *
+ * Espera $ultimas: a resposta de api/posts-index.php?page=1&per_page=3, lida
+ * no index.php. A lista "Mais Postagens" logo abaixo pede a mesma API com
+ * pular=3, então continua exatamente do 4º post em diante.
+ *
+ * Sem posts (ou com a API fora do ar) a seção inteira some, em vez de mostrar
+ * um título vazio.
+ */
+$postsTopo = (is_array($ultimas) && isset($ultimas['posts']) && is_array($ultimas['posts']))
+    ? $ultimas['posts']
+    : [];
+?>
+<?php if (!empty($postsTopo)): ?>
+<!-- ÚLTIMAS POSTAGENS -->
 <div class="container mt-4 mb-2">
-    <h3 class="pb-2 mb-3 border-bottom fw-bold">Destaques</h3>
+    <h3 class="pb-2 mb-3 border-bottom fw-bold">Últimas Postagens</h3>
     <div class="row g-3">
-        <?php
-        $todos = array_merge(
-            isset($destaques['destaque1']) && is_array($destaques['destaque1']) ? $destaques['destaque1'] : [],
-            isset($destaques['destaque2']) && is_array($destaques['destaque2']) ? $destaques['destaque2'] : []
-        );
-        foreach ($todos as $post):
-            $urlPost = htmlspecialchars(BASE_URL . '/postagem/' . $post['categoriaSlug'] . '/' . $post['slug'] . '/' . $post['id']);
+        <?php foreach ($postsTopo as $post):
+            $urlPost  = htmlspecialchars(BASE_URL . '/postagem/' . slugify((string) $post['categoria']) . '/' . $post['slug'] . '/' . $post['id']);
+            $dataPost = date('d/m/Y H:i', strtotime($post['data']));
         ?>
         <div class="col-md-4">
             <div class="card h-100 theme-card">
@@ -22,7 +34,7 @@
                     <p class="card-meta">
                         <i class="bi bi-person-fill"></i> <?= htmlspecialchars($post['autor']) ?>
                         &nbsp;&middot;&nbsp;
-                        <i class="bi bi-calendar3"></i> <?= htmlspecialchars($post['data']) ?>
+                        <i class="bi bi-calendar3"></i> <?= htmlspecialchars($dataPost) ?>
                     </p>
                     <p class="card-text flex-grow-1"><?= htmlspecialchars($post['resumo']) ?></p>
                     <a href="<?= $urlPost ?>" class="card-read-more stretched-link mt-auto">Leia mais <i class="bi bi-arrow-right"></i></a>
@@ -30,9 +42,7 @@
             </div>
         </div>
         <?php endforeach; ?>
-        <?php if (empty($todos)): ?>
-            <p class="text-muted">Nenhum destaque encontrado.</p>
-        <?php endif; ?>
     </div>
 </div>
-<!-- FINAL - DESTAQUES -->
+<!-- FINAL - ÚLTIMAS POSTAGENS -->
+<?php endif; ?>

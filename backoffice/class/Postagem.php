@@ -229,6 +229,17 @@ class Postagem {
             $capaRemovida = is_file($caminho) && @unlink($caminho);
         }
 
+        // A capa em JPG usada na prévia dos links (api/capa-previa) é só um
+        // cache dela: sem a capa, não tem mais uso.
+        if ($capaRemovida) {
+            $previa = dirname(__DIR__, 2) . '/images/img-previa/img-youtube__'
+                    . pathinfo(basename($post['imagem']), PATHINFO_FILENAME) . '.jpg';
+
+            if (is_file($previa)) {
+                @unlink($previa);
+            }
+        }
+
         return ['capa' => $capaRemovida, 'imagens' => count($removidas)];
     }
 

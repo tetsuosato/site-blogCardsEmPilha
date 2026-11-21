@@ -9,3 +9,7 @@
 !/images/img-youtube/.htaccess
 /images/img-post/*
 !/images/img-post/.htaccess
+
+# Cache das capas em JPG para a prévia dos links (descartável, refeito sob demanda)
+/images/img-previa/*
+!/images/img-previa/.htaccess
